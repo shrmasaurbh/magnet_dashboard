@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap');
+
+body {
+	font-family:'Roboto', 'Source Sans Pro', Arail, sans-serif !important;
+}
+
+.content-wrapper-collapsed, .main-footer-collapsed, .main-header-collapsed {
+    margin-left: 4.6rem!important;
+}
+
+.login-box {
+    width: 350px;
+}
+
+.elevation-2 {
+    box-shadow: 0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)!important;
+}
+.img-circle {
+    border-radius: 50%;
+}
+.nav-link{
+	cursor: pointer;
+}
+.main-footer {
+    background: #fff;
+    border-top: 1px solid #dee2e6;
+    color: #869099;
+    padding: 1rem;
+}
+.show{
+	display:block!important;
+}
+.hide{
+	display:none!important;
+}
+.inlineShow{
+	display:inline-block!important;
+}

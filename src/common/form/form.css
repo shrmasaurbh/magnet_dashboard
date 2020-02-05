@@ -1,0 +1,6 @@
+.close_form {
+    position: absolute;
+    cursor: pointer;
+    top: 12px;
+    right: 20px;
+}

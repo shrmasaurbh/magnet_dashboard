@@ -1,0 +1,91 @@
+.login-page  {
+    -ms-flex-align: center;
+    align-items: center;
+    background: #e9ecef;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 100vh;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+.login-card-body{
+    background: #fff;
+    border-top: 0;
+    color: #666;
+    padding: 20px;
+}
+
+.login-logo  {
+	background-color: #fff;
+    text-align: center;
+}
+.login-logo img {
+	width: 270px;
+    height: 50px;
+}
+.login-box-msg{
+    margin: 0;
+    padding: 0 20px 20px;
+    text-align: center;
+    font-family: Source Sans Pro;
+}
+.login-card-body .input-group .input-group-text .input-group .input-group-text {
+    background-color: transparent;
+    border-bottom-right-radius: .25rem;
+    border-left: 0;
+    border-top-right-radius: .25rem;
+    color: #777;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+[class*=icheck-] {
+    min-height: 22px;
+    margin-top: 6px!important;
+    margin-bottom: 6px!important;
+    padding-left: 0;
+}
+[class*=icheck-]>input:first-child {
+    position: absolute!important;
+    opacity: 0;
+    margin: 0;
+}
+[class*=icheck-]>input:first-child+label::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #D3CFC8;
+    border-radius: 0;
+    margin-left: -29px;
+}
+[class*=icheck-]>label {
+    padding-left: 29px!important;
+    min-height: 22px;
+    line-height: 22px;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+}
+.icheck-primary>input:first-child:checked+label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+[class*=icheck-]>input:first-child:checked+label::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 7px;
+    height: 10px;
+    border: 2px solid #fff;
+    border-left: none;
+    border-top: none;
+    transform: translate(7.75px,4.5px) rotate(45deg);
+    -ms-transform: translate(7.75px,4.5px) rotate(45deg);
+}
