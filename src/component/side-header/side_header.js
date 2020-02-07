@@ -45,11 +45,12 @@ class SideBar extends Component {
 	render(){
 
 		const clickState = this.state.outSideClick;
+        console.log("this.props.mobileBar",this.props.mobileBar);
 
 		return(
 
 			<aside className={"main-sidebar sidebar-dark-primary elevation-4" +" "+(this.props.sideBar ? 'main-sidebar-mini' : '')+" "+(this.props.mobileBar ? 'main-sidebar-open' : '')}>
-                <a href="#" className="brand-link d-none d-lg-block">
+                <a href="#" className="brand-link d-none d-lg-flex">
                     <img className={"site_img" +" "+ (this.props.sideBar ? 'hide' : 'Show')} src={siteImage} alt="site-image" />
                     <img className={"small_site_img" +" "+ (this.props.sideBar ? 'Show' : 'hide')} src={smallSiteImage} alt="site-image" />
                 </a>
@@ -62,7 +63,7 @@ class SideBar extends Component {
                             <a href="#" className="d-block">Chets Varma</a>
                         </div>
                         <span className="close_sideHeader d-lg-none">
-							<FontAwesomeIcon icon={faTimes} className="text-muted" />
+							<FontAwesomeIcon icon={faTimes} className="text-muted" onClick={this.props.mobileBarClick}/>
 						</span>
                     </div>
                     <nav className="mt-2">

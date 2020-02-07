@@ -23,16 +23,18 @@ class list extends Component {
 	    this.setState({mobileSideBar: !this.state.mobileSideBar})
 	}
 
-
 	render(){
-		return(
-			<div>
-				<Header buttonClick={this.changeButtonState.bind(this)} expand ={this.state.sideBar}/>
-				<SideBar sideBar ={this.state.sideBar} mobileBar = {this.state.mobileSideBar} mobileBarClick={this.changeSideBarState.bind(this)}/>
-				<List expand ={this.state.sideBar}/>
-				<Footer expand ={this.state.sideBar}/>
-			</div>
+		console.log("sidebarrrrrr");
+		console.log(this.state.mobileSideBar);
 
+		return( 
+
+				<div>
+					<SideBar sideBar ={this.state.sideBar} mobileBar = {this.state.mobileSideBar} mobileBarClick={this.changeSideBarState.bind(this)}/>
+					<Header buttonClick={this.changeButtonState.bind(this)} expand ={this.state.sideBar} mobileBarClick={this.changeSideBarState.bind(this)}/>
+					<List expand ={this.state.sideBar} />
+					<Footer expand ={this.state.sideBar} />
+				</div>	
 		);
 	};
 };

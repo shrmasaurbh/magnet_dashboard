@@ -1,6 +1,9 @@
 .small_site_img{
     height: 55px;
-    width: auto!important;
+    width: 72px!important;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em!important;
 }
 .main-sidebar-mini{
     margin-left: 0;
@@ -29,12 +32,19 @@
     transition: margin-left .3s ease-in-out,width .3s ease-in-out;
     width: 250px;
 }
+/*.main-sidebar:hover{
+    transition: margin-left .3s ease-in-out,width .3s ease-in-out;
+    width: 250px!important;
+}*/
+
 [class*=sidebar-dark] .brand-link {
     border-bottom: 1px solid #4b545c;
     color: rgba(255,255,255,.8);
+    width: 100%;
 }
 .brand-link, .brand-link > img{
     width: 250px;
+    padding: 0.3em 0px;
 }
 .user-panel {
     border-bottom: 1px solid #4f5962;

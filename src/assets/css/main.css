@@ -37,3 +37,8 @@ body {
 .inlineShow{
 	display:inline-block!important;
 }
+.textEllipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
