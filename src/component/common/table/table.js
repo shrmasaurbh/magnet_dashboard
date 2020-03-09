@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Row, Col, Card, Table} from 'react-bootstrap';
-import Aux from "../../utils/Aux/aux.js";
+import Aux from "../../../utils/Aux/aux.js";
 
 class BootstrapTable extends Component {
     render() {

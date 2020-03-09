@@ -12,6 +12,7 @@
     float: left;
     padding: 20px;
     position:relative;
+    min-height: 118px;
 }
 .MainList .ListContent:before {
     content: '';
@@ -23,15 +24,15 @@
     top: 27%;
 }
 .MainList .ListContent h6 {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .MainList .ListContent h3 {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .MainList .ListContent p {
-    font-size: 14px;
+    font-size: 12px;
 }
 .MainList i {
     float: left;
@@ -41,7 +42,7 @@
 }
 .MainList .ShortContent {
     width: 100%;
-    padding: 20px 0px 0px;
+    /*padding: 20px 0px 0px;*/
     float: left;
     
 }
@@ -58,20 +59,20 @@
 
 /*relevent css start below*/
 .Action {
-    padding: 7px 7px;
+    padding: 2px 4px;
     background-color: #245983;
     border-radius: 50%;
     color: #fff;
     object-fit: contain;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16);
-    width: 39px;
+    width: 26px;
     position: absolute;
-    right: 22px;
-    top: 19px;
+    right: 10px;
+    top: 8px;
     text-align: center;
     cursor: pointer;
 }
-.Action i {
+.Action > svg {
     margin: 0;
     float: none;
     color: #fff;
@@ -100,18 +101,55 @@
     display: table;
     margin: 0;
 }
-/*relevent css start above*/
+
+.fold-lead{
+    text-align:center;
+}
+
+.pagination li{
+    padding: 4px 16px;
+    background-color: #fff;
+    border: 1px solid #e8e3e3;
+    border-radius: 2px; 
+    cursor: pointer;
+}
+.pagination a{
+    color:#333;
+}
+.paginationBlock{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.active{
+    background-color: #f3f5f7!important;
+}
 
 .WhatsAppBG {
-    background: -webkit-linear-gradient(50deg, #0f7128, #6eda6c) !important;
-    background: -o-linear-gradient(50deg, #45cafc, #303f9f);
-    background: linear-gradient(40deg, #0f7128, #6eda6c);
+    top: 5em;
+    background-color:#5ca847;
 }
+.callBG{
+    top: 2.7em;
+    background-color:#5ca847;
+}
+
+.leadDetail{
+    top: 7.4em;
+}
+
 .ActionBg {
     background: -webkit-linear-gradient(50deg, #45cafc, #303f9f) !important;
     background: -o-linear-gradient(50deg, #45cafc, #303f9f);
     background: linear-gradient(40deg, #45cafc, #303f9f);
 }
+
+.ShortContent span{
+    font-size: 12px;
+}
+
+
 @media(max-width:767px){
     .ActionSection{display:block;}
     .Action{top: 44px;}
@@ -122,6 +160,12 @@
     }
 
     .MainList .ShortContent{
-        padding: 10px 0px 0px 0px;
+        padding: 0px;
     }
 }
+
+@media(max-width:767px){
+    .fold-lead{
+        text-align:left;
+    }
+}    

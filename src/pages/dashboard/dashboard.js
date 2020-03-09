@@ -16,7 +16,8 @@ class Dashboard extends Component {
 	}
 
 	changeButtonState(event) {
-	    this.setState({sideBar: !this.state.sideBar})
+	    this.setState({sideBar: !this.state.sideBar});
+	    document.body.classList.add('sidebar-enable');
 	}
 
 	changeSideBarState(event) {

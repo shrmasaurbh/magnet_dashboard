@@ -1,12 +1,21 @@
 import React, {Component} from "react";
 
+import {Link, withRouter} from "react-router-dom";
 import siteImage from "../../assets/image/HomesfyLogo.png";
 import smallSiteImage from "../../assets/image/homesfySmall.png";
 import chets from "../../assets/image/chets.jpeg";
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import "./side_header.css";
 import "../../assets/css/main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faAngleLeft, faCircle, faTachometerAlt, faPlusSquare, faTasks, faAngleDown ,faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faPowerOff, faAngleLeft, faCircle, faTachometerAlt, faPlusSquare, faTasks, faAngleDown ,faTimes} from "@fortawesome/free-solid-svg-icons";
+import {getLogout} from "../../dataParser/auth"
+
+// const scrollbarStyle = {
+//     'maxHeight': '110ev'
+// };
+
 
 class SideBar extends Component {
 
@@ -14,141 +23,240 @@ class SideBar extends Component {
 	    	super(props);
 	    	this.state = {
 	      		visibility: false,
-	      		outSideClick : false
+                leadShow: false,
+	      		outSideClick : false,
+                userName : ""
 	    	};
-	    	// this.setWrapperRef = this.setWrapperRef.bind(this);
-    		// this.handleClickOutside = this.handleClickOutside.bind(this);
   		}
 
-		// componentDidMount() {
-		// 	document.addEventListener('mousedown', this.handleClickOutside);
-		// }
-		// componentWillUnmount() {
-		// 	document.removeEventListener('mousedown', this.handleClickOutside);
-		// }
-		// /**
-		// * Set the wrapper ref
-		// */
-		// setWrapperRef(node) {
-		// 	this.wrapperRef = node;
-		// }
-		/**
-		* Alert if clicked on outside of element
-		*/
-		// handleClickOutside(event) {
-		// 	if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-		// 		alert('You clicked outside of me!');
-		// 		this.setState({outSideClick : !this.state.outSideClick})
-		// 		this.props.mobileBarClick();
-		// 	}
-		// }	
+		componentDidMount() {
+			// document.addEventListener('mousedown', this.handleClickOutside);
+            let homesfy_lg = window.atob(localStorage.getItem("homesfy_lg"));
+            // console.log(homesfy_lg);
+            if(homesfy_lg && homesfy_lg !== ""){
+                // console.log("===========Local in the sidebar ==========")
+                let user = JSON.parse(homesfy_lg);
+                this.setState({userName: user.name});
+            }
+            // if (homesfy_lg && homesfy_lg !== "") {
+            //   this.props.history.push("/");
+            // }
+		}
+
+        logout = async () =>{
+
+            var resData = {};
+            resData = await getLogout();
+
+            if(resData.meta.status === 200){
+                localStorage.clear();
+                this.props.history.push("/login");
+            }
+            else if(resData.meta.status === 401){
+                localStorage.clear();
+                this.props.history.push("/login");
+            }
+            else{
+
+                alert(resData.meta.message);
+            }
+            
+        }
+
+        // onHoverSidebar = ()=>{
+
+        //     this.props.buttonClick();
+
+        // }
+        // onLeaveSidebar = () =>{
+        //     this.props.buttonClick();
+        // }
+
+		
 	render(){
 
 		const clickState = this.state.outSideClick;
-        console.log("this.props.mobileBar",this.props.mobileBar);
-
+        console.log("this.props.leadInfo00000000000",this.props.leadInfo);
+        console.log(this.state.userName);
+        const {userName} = this.state;
 		return(
 
-			<aside className={"main-sidebar sidebar-dark-primary elevation-4" +" "+(this.props.sideBar ? 'main-sidebar-mini' : '')+" "+(this.props.mobileBar ? 'main-sidebar-open' : '')}>
-                <a href="#" className="brand-link d-none d-lg-flex">
-                    <img className={"site_img" +" "+ (this.props.sideBar ? 'hide' : 'Show')} src={siteImage} alt="site-image" />
-                    <img className={"small_site_img" +" "+ (this.props.sideBar ? 'Show' : 'hide')} src={smallSiteImage} alt="site-image" />
-                </a>
-                <div className="sidebar">
-                    <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-                        <div className="image">
-                        	<img className="img-circle elevation-2" src={chets} alt="site-image" />
-                        </div>
-                        <div className={"info" +" "+ (this.props.sideBar ? 'hide' : 'Show')}>
-                            <a href="#" className="d-block">Chets Varma</a>
-                        </div>
-                        <span className="close_sideHeader d-lg-none">
-							<FontAwesomeIcon icon={faTimes} className="text-muted" onClick={this.props.mobileBarClick}/>
-						</span>
-                    </div>
-                    <nav className="mt-2">
-                        <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                            <li className="nav-item has-treeview menu-open">
-                                <a href="#" className="nav-link bg-success text-white">
-                                    <FontAwesomeIcon icon={faTachometerAlt} className="nav-icon" />
-                                    <p className={this.props.sideBar ? 'hide' : 'inlineShow'}>
-                                        Dashboard
-                                    </p>
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link text-white">
-                                    <FontAwesomeIcon icon={faPlusSquare} className="nav-icon" />
-                                    <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
-                                        New Leads
-                                        <span className="right badge badge-danger">New</span>
-                                    </p>
-                                </a>
-                            </li>
-                            <li className="nav-item has-treeview">
-                                <a className="nav-link text-white" onClick={()=>this.setState({visibility : !this.state.visibility})}>
-                                    <FontAwesomeIcon icon={faTasks} className="nav-icon" />
-                                    <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
-                                        	Tasks
-                                        <FontAwesomeIcon icon={faAngleLeft} 
-                                        	className={"right leftAngleIcon" +" "+(this.state.visibility ? 'hide' : 'show') } />
-                                        <span className="badge badge-info right">6</span>
-                                        <FontAwesomeIcon icon={faAngleDown} 
-                                        	className={"right downAngleIcon" + " " +(this.state.visibility ? 'show' : 'hide') }/>
-                                    </p>
-                                </a>
-                                <ul className={"nav nav-treeview"+" "+ (this.state.visibility ? 'show' : 'hide')}>
-                                    <li className="nav-item">
-                                        <a href="pages/layout/top-nav.html" className="nav-link">
-                                            <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                            <p>Top Navigation</p>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a href="pages/layout/top-nav-sidebar.html" className="nav-link">
-                                            <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                            <p>Top Navigation + Sidebar</p>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a href="pages/layout/boxed.html" className="nav-link">
-                                            <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                            <p>Boxed</p>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a href="pages/layout/fixed-sidebar.html" className="nav-link">
-                                            <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                            <p>Fixed Sidebar</p>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a href="pages/layout/fixed-topnav.html" className="nav-link">
-                                            <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                            <p>Fixed Navbar</p>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a href="pages/layout/fixed-footer.html" className="nav-link">
-                                            <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                            <p>Fixed Footer</p>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a href="pages/layout/collapsed-sidebar.html" className="nav-link">
-                                            <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                            <p>Collapsed Sidebar</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
+			<aside className={"main-sidebar sidebar-dark-primary elevation-4" +" "+(this.props.sideBar ? 'main-sidebar-mini' : '')+" "+(this.props.mobileBar ? 'main-sidebar-open' : '')}
+                ref={this.setWrapperRef}
+            >
+                <div className="brand-link d-none d-lg-flex">
+                {this.props.sideBar ? 
+                    <Link to="/">
+                        <img className="small_site_img" src={smallSiteImage} alt="site_image" />
+                    </Link>    
+                    :
+                    <Link to="/">
+                        <img className="site_img" src={siteImage} alt="small_site_logo" />
+                    </Link>    
+                }
                 </div>
+                <PerfectScrollbar >
+                    <div className="sidebar">
+                        <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+                            <div className="image">
+                            	<img className="img-circle elevation-2" src={chets} alt="user_image" />
+                            </div>
+                            <div className={"info" +" "+ (this.props.sideBar ? 'hide' : 'Show')}>
+                                <span className="d-block text-capitalize userName">{userName}</span>
+                            </div>
+                            <span className="close_sideHeader d-lg-none">
+    							<FontAwesomeIcon icon={faTimes} className="text-muted" onClick={this.props.mobileBarClick}/>
+    						</span>
+                        </div>
+                        <nav className="mt-2">
+                            <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                                <li className="nav-item has-treeview menu-open">
+                                    <div href="#" className="nav-link bg-white text-white">
+                                        <FontAwesomeIcon icon={faTachometerAlt} className="nav-icon text-dark" />
+                                        <p className={this.props.sideBar ? 'hide' : 'inlineShow'}>
+                                           <Link to="/">Dashboard</Link>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li className="nav-item has-treeview">
+                                    <a className="nav-link text-white" onClick={()=>this.setState({leadShow : !this.state.leadShow})}>
+                                        <FontAwesomeIcon icon={faPlusSquare} className="nav-icon" />
+                                        <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
+                                                Leads
+                                            <FontAwesomeIcon icon={this.state.leadShow ? faAngleDown : faAngleLeft} className="right leftAngleIcon" />
+                                            <span className="badge badge-danger right">New</span>
+                                        </p>
+                                    </a>
+                                    {this.props.sideBar ? ''
+                                        : 
+                                        <ul className={"nav nav-treeview"+" "+ (this.state.leadShow ? 'show' : 'hide')}>
+                                            <li className="nav-item">
+                                                <Link to="/leads/all" className={"nav-link"+" "+(this.props.leadInfo === 'all' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>All Leads</p>
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link to="/leads/new" className={"nav-link"+" "+(this.props.leadInfo === 'new' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>New Leads</p>
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link to="/leads/assigned" className={"nav-link"+" "+(this.props.leadInfo === 'assigned' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Assigned Leads</p>
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link to="/leads/autoassigned" className={"nav-link"+" "+(this.props.leadInfo === 'autoassigned' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Auto Assigned Leads</p>
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link to="/leads/booked" className={"nav-link"+" "+(this.props.leadInfo === 'booked' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Booked Leads</p>
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link to="/leads/closed" className={"nav-link"+" "+(this.props.leadInfo === 'closed' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Closed Leads</p>
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link to="/leads/cancel" className={"nav-link"+" "+(this.props.leadInfo === 'cancel' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Cancel Leads</p>
+                                                </Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link to="/leads/open" className={"nav-link"+" "+(this.props.leadInfo === 'open' ? 'active' : '')}>
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Open Leads</p>
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    }    
+                                </li>
+                                <li className="nav-item has-treeview">
+                                    <a className="nav-link text-white" onClick={()=>this.setState({visibility : !this.state.visibility})}>
+                                        <FontAwesomeIcon icon={faTasks} className="nav-icon" />
+                                        <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
+                                            	Tasks
+                                            <FontAwesomeIcon icon={faAngleLeft} 
+                                            	className={"right leftAngleIcon" +" "+(this.state.visibility ? 'hide' : 'show') } />
+                                            <span className="badge badge-info right">6</span>
+                                            <FontAwesomeIcon icon={faAngleDown} 
+                                            	className={"right downAngleIcon" + " " +(this.state.visibility ? 'show' : 'hide') }/>
+                                        </p>
+                                    </a>
+                                    {this.props.sideBar ? ''
+                                        :
+                                        <ul className={"nav nav-treeview"+" "+ (this.state.visibility ? 'show' : 'hide')}>
+                                            <li className="nav-item">
+                                                <a href="pages/layout/top-nav.html" className="nav-link">
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Top Navigation</p>
+                                                </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a href="pages/layout/top-nav-sidebar.html" className="nav-link">
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Top Navigation + Sidebar</p>
+                                                </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a href="pages/layout/boxed.html" className="nav-link">
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Boxed</p>
+                                                </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a href="pages/layout/fixed-sidebar.html" className="nav-link">
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Fixed Sidebar</p>
+                                                </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a href="pages/layout/fixed-topnav.html" className="nav-link">
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Fixed Navbar</p>
+                                                </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a href="pages/layout/fixed-footer.html" className="nav-link">
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Fixed Footer</p>
+                                                </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a href="pages/layout/collapsed-sidebar.html" className="nav-link">
+                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
+                                                    <p>Collapsed Sidebar</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    }                                        
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link text-white" onClick={this.logout}>
+                                        <FontAwesomeIcon icon={faPowerOff} className="nav-icon text-danger" />
+                                        <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
+                                            Log Out
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </PerfectScrollbar>
             </aside>                	
 
 		);
 	};
 };	
 
-export default SideBar;
+export default withRouter(SideBar);

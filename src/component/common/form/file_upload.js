@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import Aux from "../../utils/Aux/aux.js";
+import Aux from "../../../utils/Aux/aux.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faTimes} from "@fortawesome/free-solid-svg-icons";
 
 
 class FileUpload extends Component {
@@ -7,6 +9,9 @@ class FileUpload extends Component {
         return (
             <Aux>
 	            <div className="card">
+	            	<span className="close_form">
+						<FontAwesomeIcon icon={faTimes} className="text-danger" />
+					</span>
 	            	<form role="form">
 						<div className="card-body">
 							<div className="row">

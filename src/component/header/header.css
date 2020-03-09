@@ -15,10 +15,7 @@
 .navbar-light .navbar-nav .nav-link {
     color: rgba(0,0,0,.5);
 }
-.navbar-expand .navbar-nav .nav-link {
-    padding-right: 1rem!important;
-    padding-left: 1rem!important;
-}
+
 .main-header .nav-link {
     height: 2.5rem;
     position: relative;
@@ -62,4 +59,22 @@
     .mobileSearchForm{
         display: none;
     }
+
+    .filterMenu {
+        width: 95% !important;
+        /*right: 8% !important;*/
+        position: fixed;
+    }
+}
+
+.filterMenu{
+    width: 30%;
+    right: 0px;
+    top:56px;
+    margin-right: -662px;
+    position: fixed;
+    transition: all 0.4s linear 0s;
+}
+.filterMenuShow{
+    margin-right: 0px!important;
 }

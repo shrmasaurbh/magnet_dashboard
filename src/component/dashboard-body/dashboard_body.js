@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 
-import BootstrapTable from "../../common/table/table.js"
-import Chart from "../../common/chart/donut_chart.js"
-import BasicForm from "../../common/form/form.js"
-import FileUpload from "../../common/form/file_upload.js"
+import BootstrapTable from "../../component/common/table/table.js"
+import Chart from "../../component/common/chart/donut_chart.js"
+import BasicForm from "../../component/common/form/form.js"
+import FileUpload from "../../component/common/form/file_upload.js"
 import "./dashboard_body.css";
 import "../../assets/css/main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

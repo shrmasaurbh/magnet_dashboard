@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Aux from "../../utils/Aux/aux.js";
+import Aux from "../../../utils/Aux/aux.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEnvelope, faLock, faUser, faTimes} from "@fortawesome/free-solid-svg-icons";
 import "./form.css";
@@ -9,12 +9,7 @@ class BasicForm extends Component {
         return (
             <Aux>
             	<div className="card card-primary">
-					<div className="card-header">
-						<h5>Form</h5>
-						<span className="close_form">
-							<FontAwesomeIcon icon={faTimes} className="text-danger" />
-						</span>
-					</div>
+					
 					<form role="form">
 						<div className="card-body">
 							<div className="row">

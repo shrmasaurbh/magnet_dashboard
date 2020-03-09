@@ -1,0 +1,23 @@
+.modal-content{
+  width: 1200px;
+}
+.commnets{
+	display: flex;
+	justify-content: flex-end;
+}
+.commnets span{
+	color:#245983;
+}
+.commnets span:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+.detailLead{
+	min-height: 600px;
+	/*overflow-x: hidden;*/
+	/*overflow-y: scroll;*/
+	max-height: 600px;
+}
+.commentBox{
+	max-height: 320px;
+}

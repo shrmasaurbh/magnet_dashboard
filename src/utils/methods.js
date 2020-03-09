@@ -1,15 +1,51 @@
 import axios from 'axios';
 import API from './api';
+import {getToken} from './api';
+
+
+const tokenData = getToken();
+
+const urlOrigin = window.location.origin;
+const urlHref = window.location.href;
+let urlVal = urlHref.substr(urlOrigin.length, 5);
+
+
+if(urlVal == "/login" || urlVal == "/forget-password" || urlVal == "/reset-password" || urlVal == "/register"){
+
+    var headers = {
+      'Content-Type': 'application/json',
+      // 'Access-Control-Allow-Origin':'*'
+    }
+
+}else {
+    var headers = {
+      'Content-Type': 'application/json',
+      // 'Authorization': tokenData.token ,
+      // 'Access-Control-Allow-Origin':'*'
+    }
+}
 
 
 export const get = async (url,options) =>{
+    console.log(headers);
+    console.log(url);
 
-    if(options == null && options == ''){
-        let res = await API.get(url);
-        return res;
+    if(options == null || options == ''){
+        console.log("in the ooooooooooooooooo");
+        // let res = await API.get(url,{headers : headers});
+        // return res;
+        return await API.get(url, {headers : headers})
+                  .then(response => { 
+                    return response.data;
+                  })
+                  .catch(error => {
+                      console.log("in the errroroorro");
+                      console.log(error.response)
+                      return error.response.data;
+                  });
     }
     else{
-        let res = await API.get(url,{params:options});
+        let res = await API.get(url,{params:options},{headers : headers});
         
         if(res != null){
             return res.data;
@@ -26,21 +62,54 @@ export const post = async (url, options) => {
 
     console.log("===========in the method Callllllll")
     console.log(options);
-    if(options == null && options == ''){
 
-        let errorRes = "Data field is empty";
-        return errorRes
+      if(options == null && options == ''){
 
-    }else{
-        let res = await API.post(url, options);
-        return res.data;
+          let errorRes = "Data field is empty";
+          return errorRes
 
-    }
+      }else{
+       return await API.post(url, options,{headers : headers})
+                  .then(response => { 
+                    return response.data;
+                  })
+                  .catch(error => {
+                      console.log("in the errroroorro");
+                      console.log(error.response)
+                      return error.response.data;
+                  });
+      }
   // } catch (e) {
   //   console.log('😱 Axios request failed: ${e}',e);
   // }
 
 };
+
+export const patch = async (url, options) => {
+
+      if(options == null && options == ''){
+
+          let errorRes = "Data field is empty";
+          return errorRes
+
+      }else{
+       return await API.patch(url, options, {headers : headers})
+                  .then(response => { 
+                    return response.data;
+                  })
+                  .catch(error => {
+                      console.log("in the errroroorro");
+                      console.log(error)
+                      // return error.response.data;
+                  });
+      }
+  // } catch (e) {
+  //   console.log('😱 Axios request failed: ${e}',e);
+  // }
+
+};
+
+
 
 const accessToken = () => {
   if (localStorage.getItem("homesfy_lg")) {
