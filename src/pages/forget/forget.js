@@ -60,7 +60,7 @@ class Forget extends Component {
 	      confirmpassword
 	    }))(this.state);
 
-	    if(changePwdRequest.password === changePwdRequest.confirmpassword){
+	    if(changePwdRequest.password != "" && changePwdRequest.confirmpassword != "" && changePwdRequest.password === changePwdRequest.confirmpassword){
 	    	let resData = await getChangePwdRes(changePwdRequest);
 
 	    	if(resData.meta.status === 200){

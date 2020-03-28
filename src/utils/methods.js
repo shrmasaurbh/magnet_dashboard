@@ -2,39 +2,43 @@ import axios from 'axios';
 import API from './api';
 import {getToken} from './api';
 
+const getHeader = () =>{
 
-const tokenData = getToken();
+  const tokenData = getToken();
 
-const urlOrigin = window.location.origin;
-const urlHref = window.location.href;
-let urlVal = urlHref.substr(urlOrigin.length, 5);
+  const urlOrigin = window.location.origin;
+  const urlHref = window.location.href;
+  let urlVal = urlHref.substr(urlOrigin.length);
 
+  console.log("urlVal",urlVal);
 
-if(urlVal == "/login" || urlVal == "/forget-password" || urlVal == "/reset-password" || urlVal == "/register"){
+  if(urlVal == "/login" || urlVal == "/forget-password" || urlVal == "/reset-password" || urlVal == "/register"){
 
     var headers = {
-      'Content-Type': 'application/json',
-      // 'Access-Control-Allow-Origin':'*'
-    }
+        'Content-Type': 'application/json',
+        // 'Access-Control-Allow-Origin':'*'
+      }
 
-}else {
-    var headers = {
-      'Content-Type': 'application/json',
-      // 'Authorization': tokenData.token ,
-      // 'Access-Control-Allow-Origin':'*'
-    }
+    console.log("headers",headers);
+    return headers;  
+
+  }else {
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': tokenData.token ,
+        // 'Access-Control-Allow-Origin':'*'
+      }
+    console.log("headers",headers);
+    return headers;  
+  }
 }
 
-
 export const get = async (url,options) =>{
-    console.log(headers);
-    console.log(url);
-
     if(options == null || options == ''){
         console.log("in the ooooooooooooooooo");
         // let res = await API.get(url,{headers : headers});
         // return res;
-        return await API.get(url, {headers : headers})
+        return await API.get(url, {headers : getHeader()})
                   .then(response => { 
                     return response.data;
                   })
@@ -45,7 +49,7 @@ export const get = async (url,options) =>{
                   });
     }
     else{
-        let res = await API.get(url,{params:options},{headers : headers});
+        let res = await API.get(url,{params:options},{headers : getHeader()});
         
         if(res != null){
             return res.data;
@@ -60,16 +64,13 @@ export const get = async (url,options) =>{
 
 export const post = async (url, options) => {
 
-    console.log("===========in the method Callllllll")
-    console.log(options);
-
       if(options == null && options == ''){
 
           let errorRes = "Data field is empty";
           return errorRes
 
       }else{
-       return await API.post(url, options,{headers : headers})
+       return await API.post(url, options,{headers : getHeader()})
                   .then(response => { 
                     return response.data;
                   })
@@ -93,7 +94,34 @@ export const patch = async (url, options) => {
           return errorRes
 
       }else{
-       return await API.patch(url, options, {headers : headers})
+       return await API.patch(url, options, {headers : getHeader()})
+                  .then(response => { 
+                    return response.data;
+                  })
+                  .catch(error => {
+                      console.log("in the errroroorro");
+                      console.log(error)
+                      // return error.response.data;
+                  });
+      }
+  // } catch (e) {
+  //   console.log('😱 Axios request failed: ${e}',e);
+  // }
+
+};
+
+export const put = async (url, options) => {
+
+      console.log(url);
+      console.log(options);
+
+      if(options == null && options == ''){
+
+          let errorRes = "Data field is empty";
+          return errorRes
+
+      }else{
+       return await API.patch(url, options, {headers : getHeader()})
                   .then(response => { 
                     return response.data;
                   })
@@ -177,20 +205,20 @@ const sendResponse = (res) => {
 
 // };
 
-export const put = (url, options) => {
-  options.method = "PUT";
-  options.headers = {
-    "Content-Type": "application/json",
-    Accept: "*/*",
-    access_token: accessToken()
-  };
+// export const put = (url, options) => {
+//   options.method = "PUT";
+//   options.headers = {
+//     "Content-Type": "application/json",
+//     Accept: "*/*",
+//     access_token: accessToken()
+//   };
 
-  return fetch(url, options).then(stream =>
-    stream.json().then(res => {
-      return sendResponse(stream, res);
-    })
-  );
-};
+//   return fetch(url, options).then(stream =>
+//     stream.json().then(res => {
+//       return sendResponse(stream, res);
+//     })
+//   );
+// };
 
 export const Delete = url => {
   let headers = new Headers({

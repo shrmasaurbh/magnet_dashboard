@@ -7,7 +7,6 @@ import List from "../../component/magnetList/magnetList";
 import {getListData} from "../../dataParser/getListData";
 import Loader from "../../component/common/loader/loader";
 
-
 class list extends Component {
 
 	constructor(props){
@@ -54,12 +53,18 @@ class list extends Component {
 		        	showLoader : false,
 		        }) ;
         		window.scrollTo(0, 0);
-		        this.setState({})
 
         	}else if(resData.meta.status == 401){
         		localStorage.clear();
         		this.props.history.push("/login");
+        	}else{
+
+        		this.setState({
+		        	listDetail : resData,
+		        	showLoader : false,
+		        }) ;
         	}
+
         },500)
     }
 
@@ -105,6 +110,12 @@ class list extends Component {
 	        	}else if(resData.meta.status == 401){
 	        		localStorage.clear();
 	        		this.props.history.push("/login");
+	        	}else{
+
+	        		this.setState({
+			        	listDetail : resData,
+			        	showLoader : false,
+			        }) ;
 	        	}
 	        },500)
 		}

@@ -8,7 +8,7 @@ class BasicForm extends Component {
     render() {
         return (
             <Aux>
-            	<div className="card card-primary">
+            	<div className="formContainer">
 					
 					<form role="form">
 						<div className="card-body">

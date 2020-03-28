@@ -1,3 +1,20 @@
 .filterRow{
 	width: inherit;
 }
+.MuiOutlinedInput-input{
+    padding: 9.5px 4px !important;
+}
+.MuiFormControl-root{
+	width: 100%;
+}
+.filter_lead{
+	max-height: 600px;
+	/*display: block !important;*/
+	flex-wrap: nowrap !important;
+}
+.filterMenu .filterMenuCard {
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word; 
+    background-clip: border-box;
+}

@@ -36,31 +36,32 @@ class Header extends Component {
     }
 
     handlePopUp =()=> {
-        if (!this.state.showFilter) {
-          // attach/remove event handler
-          document.addEventListener('click', this.handleOutsideClick, false);
-        } else {
-          document.removeEventListener('click', this.handleOutsideClick, false);
-        }
+        // if (!this.state.showFilter) {
+        //   // attach/remove event handler
+        //   document.addEventListener('click', this.handleOutsideClick, false);
+        // } else {
+        //   document.removeEventListener('click', this.handleOutsideClick, false);
+        // }
 
         this.setState(prevState => ({
            showFilter: !prevState.showFilter,
         }));
     }
 
-    handleOutsideClick=(e)=> {
+    // handleOutsideClick=(e)=> {
         
-        if (this.node.contains(e.target)) {
-          return;
-        }
-        // console.log(this.node);
-        this.handlePopUp();
-    }
+    //     if (this.node.contains(e.target)) {
+    //       return;
+    //     }
+    //     console.log(this.node);
+    //     console.log(e.target);
+    //     this.handlePopUp();
+    // }
 
 	render(){
         const isDesktop = this.state.screenWidth;
-        console.log("this.props.buttonClick");
-        console.log(this.state.mobileSearch);
+        // console.log("this.props.buttonClick");
+        // console.log(this.state.mobileSearch);
 
 		return(
 
@@ -92,12 +93,12 @@ class Header extends Component {
                         </div>
                     </form>
                     <ul className="navbar-nav ml-auto">
-                        <li className="nav-item dropdown" ref={node => { this.node = node; }}>
+                        <li className="nav-item dropdown">
                             <span className="nav-link" data-toggle="dropdown" onClick ={this.handlePopUp}>
                             	<FontAwesomeIcon icon={faFilter} className="nav-icon" />
                                 <span className="badge navbar-badge">Filter</span>
                             </span>
-                            <div className={"filterMenu" + " "+ (this.state.showFilter ? 'filterMenuShow' : '')}>
+                            <div className={"filterMenu" + " "+ (this.state.showFilter ? 'filterMenuShow' : '')} ref={node => { this.node = node; }}>
                                 <Filter />
                             </div>
                         </li>

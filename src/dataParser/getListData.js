@@ -72,6 +72,15 @@ export const getFullLeadData = async (value) =>{
 
 }
 
+export const getAddLeadData = async (value) =>{
+
+	console.log(value);
+	let AddLeadData = await post('/leads/add',value)
+	console.log('loginData ===>', AddLeadData);
+	return  AddLeadData;
+
+}
+
 export const getCommentData = async (value) =>{
 
 	console.log(value);

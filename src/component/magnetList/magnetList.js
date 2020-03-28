@@ -10,6 +10,7 @@ import {faWhatsapp} from "@fortawesome/free-brands-svg-icons";
 import {faUsertie} from "@fortawesome/free-regular-svg-icons";
 import DetailLead from "../detailLead/detailLead";
 import Loader from "../../component/common/loader/loader";
+import SpeedDialLead from "../../component/common/material/leadSpeedDail";
 
 class magnetList extends Component {
 
@@ -29,13 +30,14 @@ class magnetList extends Component {
 
   	
   	componentDidUpdate(nextProps) {
-	 console.log('componentWillReceiveProps', nextProps);
+	 console.log('componentWillReceiveProps xxxxxxxxxx', nextProps);
 	 	if (this.props !== nextProps) {
 	  	// this.setState({nextProps});
 	  	this.setState({
 	  		meta:nextProps.listValue.meta,
 	  		data:nextProps.listValue.data,
 	  		activePage : 1,
+	  		listDetail: false,
 	 	 });
 		// console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx',nextProps);
 		}
@@ -109,13 +111,12 @@ class magnetList extends Component {
         this.genericGetListData(listData);
 	}
 
-	fullLeadDetail = async ()=>{
+	fullLeadDetail = async (id)=>{
         this.setState({showLoader : true});
-        let leadId = this.anchor.getAttribute('data');
-        console.log(leadId);
+        console.log("leadIdXXXXXXXXXX",id);
 
         var resData = {};
-        resData = await getFullLeadData(leadId);
+        resData = await getFullLeadData(id);
 
         setTimeout(()=>{
         	if(resData.meta.status === 200){
@@ -125,7 +126,7 @@ class magnetList extends Component {
 		        	showLoader : false
 		        })
         		window.scrollTo(0, 0);
-        	}else if(resData.meta.status == 401){
+        	}else if(resData.meta.status === 401){
         		localStorage.clear();
         		this.props.history.push("/login");
         	}else{
@@ -146,13 +147,14 @@ class magnetList extends Component {
 
 		console.log("in the magnet list");
 		const {count, size, status, pageId} = this.state.meta;
-		console.log(this.state.data);
+		console.log("in the magnet list",this.state.meta.status);
 		let leadFullData = this.state.fullDetail;
 
 		return(
 
 			<Aux>
 				<div className={"content-wrapper"+" "+(this.props.expand ? 'main-header-collapsed' : '')}>
+				<SpeedDialLead />
 				<Loader show={this.state.showLoader}/>
 				{status === 200 ?
 					<div className="listContainer">
@@ -163,7 +165,7 @@ class magnetList extends Component {
 							{this.state.data.map((listVal,index) => 
 								<div className="MainList" key={listVal.lead_id}>
 							        <div className="container-fluid">
-							            <div className="ListContent card mb-2">
+							            <div className="ListContent card mb-2" onClick={() => this.detailView(index)}>
 							                <div className="row mb-1">
 							                    <div className="col-md-3 col-sm-12 col-12  mb-2">
 							                        <div className="row">
@@ -188,7 +190,14 @@ class magnetList extends Component {
 						                                	</h3>
 							                            </div>
 							                            <div className="col-md-4 col-sm-12 col-12 mb-2">
-							                                <h3><FontAwesomeIcon icon={faBuilding} className="text-info mr-2"/>{listVal.project_name}</h3>
+							                                <h3>
+							                                	<FontAwesomeIcon icon={faBuilding} className="text-info mr-2"/>
+							                                	{listVal.project_details  ? 
+								                                	<b>{listVal.project_details.project_name}</b>
+								                                	:
+								                                	<b>-</b>
+						                                		}
+						                                	</h3>
 							                            </div>
 							                            <div className="col-md-3 col-sm-12 col-12 mb-2">
 							                                <h3 className="text-capitalize">
@@ -295,8 +304,7 @@ class magnetList extends Component {
 								                </div>
 								            	<a className="leadDetail Action d-none d-md-block" 
 								            		data-toggle="tooltip" data-placement="bottom" title="View full lead"
-								            		onClick={()=>{this.handleModal(); this.fullLeadDetail()}} data={listVal.lead_id} 
-								            		ref={(ref) => this.anchor = ref}
+								            		onClick={()=>{this.handleModal(); this.fullLeadDetail(listVal.lead_id)}} data={listVal.lead_id} 
 							            		>
 								            		<FontAwesomeIcon icon={faInfo} className="text-white"/>
 							            		</a>

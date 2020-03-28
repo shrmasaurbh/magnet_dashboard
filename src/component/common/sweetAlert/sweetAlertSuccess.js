@@ -18,7 +18,7 @@ class sweetAlert extends Component {
                   // showCancelButton
 
 	render(){
-		// console.log("this.props.show",this.props.show);
+		console.log("this.props.showXXXXXXXXXXXX",this.props);
 		// console.log("this.props.Sweetshow",this.props.changeSweet);
 
 		return(
@@ -29,7 +29,7 @@ class sweetAlert extends Component {
 		          show={this.props.show}
 		          title={this.props.type}
 		          html
-		          text="Good Job!"
+		          text={this.props.title}
 		          onConfirm={this.props.changeSweet}
 		          confirmButtonColor="#a5dc85"
 		        />	

@@ -9,7 +9,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import "./side_header.css";
 import "../../assets/css/main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faPowerOff, faAngleLeft, faCircle, faTachometerAlt, faPlusSquare, faTasks, faAngleDown ,faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faPowerOff, faBuilding, faAngleLeft, faCircle, faTachometerAlt, faPlusSquare, faTasks, faAngleDown ,faTimes} from "@fortawesome/free-solid-svg-icons";
 import {getLogout} from "../../dataParser/auth"
 
 // const scrollbarStyle = {
@@ -143,18 +143,6 @@ class SideBar extends Component {
                                                 </Link>
                                             </li>
                                             <li className="nav-item">
-                                                <Link to="/leads/assigned" className={"nav-link"+" "+(this.props.leadInfo === 'assigned' ? 'active' : '')}>
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Assigned Leads</p>
-                                                </Link>
-                                            </li>
-                                            <li className="nav-item">
-                                                <Link to="/leads/autoassigned" className={"nav-link"+" "+(this.props.leadInfo === 'autoassigned' ? 'active' : '')}>
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Auto Assigned Leads</p>
-                                                </Link>
-                                            </li>
-                                            <li className="nav-item">
                                                 <Link to="/leads/booked" className={"nav-link"+" "+(this.props.leadInfo === 'booked' ? 'active' : '')}>
                                                     <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
                                                     <p>Booked Leads</p>
@@ -166,18 +154,6 @@ class SideBar extends Component {
                                                     <p>Closed Leads</p>
                                                 </Link>
                                             </li>
-                                            <li className="nav-item">
-                                                <Link to="/leads/cancel" className={"nav-link"+" "+(this.props.leadInfo === 'cancel' ? 'active' : '')}>
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Cancel Leads</p>
-                                                </Link>
-                                            </li>
-                                            <li className="nav-item">
-                                                <Link to="/leads/open" className={"nav-link"+" "+(this.props.leadInfo === 'open' ? 'active' : '')}>
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Open Leads</p>
-                                                </Link>
-                                            </li>
                                         </ul>
                                     }    
                                 </li>
@@ -185,12 +161,8 @@ class SideBar extends Component {
                                     <a className="nav-link text-white" onClick={()=>this.setState({visibility : !this.state.visibility})}>
                                         <FontAwesomeIcon icon={faTasks} className="nav-icon" />
                                         <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
-                                            	Tasks
-                                            <FontAwesomeIcon icon={faAngleLeft} 
-                                            	className={"right leftAngleIcon" +" "+(this.state.visibility ? 'hide' : 'show') } />
-                                            <span className="badge badge-info right">6</span>
-                                            <FontAwesomeIcon icon={faAngleDown} 
-                                            	className={"right downAngleIcon" + " " +(this.state.visibility ? 'show' : 'hide') }/>
+                                            	Project
+                                            <FontAwesomeIcon icon={this.state.visibility ? faAngleDown : faAngleLeft} className="right leftAngleIcon" />
                                         </p>
                                     </a>
                                     {this.props.sideBar ? ''
@@ -199,47 +171,25 @@ class SideBar extends Component {
                                             <li className="nav-item">
                                                 <a href="pages/layout/top-nav.html" className="nav-link">
                                                     <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Top Navigation</p>
+                                                    <p>All Project</p>
                                                 </a>
                                             </li>
                                             <li className="nav-item">
                                                 <a href="pages/layout/top-nav-sidebar.html" className="nav-link">
                                                     <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Top Navigation + Sidebar</p>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/boxed.html" className="nav-link">
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Boxed</p>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/fixed-sidebar.html" className="nav-link">
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Fixed Sidebar</p>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/fixed-topnav.html" className="nav-link">
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Fixed Navbar</p>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/fixed-footer.html" className="nav-link">
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Fixed Footer</p>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/collapsed-sidebar.html" className="nav-link">
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Collapsed Sidebar</p>
+                                                    <p>Project Details</p>
                                                 </a>
                                             </li>
                                         </ul>
                                     }                                        
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/projects" className="nav-link text-white">
+                                        <FontAwesomeIcon icon={faBuilding} className="nav-icon text-white" />
+                                        <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
+                                            Projects
+                                        </p>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link text-white" onClick={this.logout}>

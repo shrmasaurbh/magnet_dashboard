@@ -1,5 +1,6 @@
 const APP_URL = "http://localhost:5000"; 
 const CORE_API_URL = "http://35.154.76.18:4000/api"; 
+// const CORE_API_URL = "http://192.168.1.11:4000/api"; 
 
 
 

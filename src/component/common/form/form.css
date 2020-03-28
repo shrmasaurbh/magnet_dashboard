@@ -4,3 +4,17 @@
     top: 12px;
     right: 20px;
 }
+.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+    padding: 0px 65px 0px 0px !important; 
+}
+.MuiInputLabel-formControl {
+    top: -8px !important;
+}
+.projectForm textarea, .project_name .MuiAutocomplete-hasPopupIcon{
+	width: 100%;
+}
+.showFildes{
+	text-decoration: underline;
+	cursor: pointer;
+	font-size: 12px;
+}
