@@ -14,6 +14,7 @@ class ProjectModal extends Component {
 			"updateProject" : updateForm,
 		}
 		const Form_name = FROMS_TYPES[this.props.fromType];
+		console.log(this.props.fromType);
 
         return (
             <Aux>
@@ -30,7 +31,11 @@ class ProjectModal extends Component {
 			        </Modal.Title>
 			      </Modal.Header>
 			      <Modal.Body>
-			        <Form_name changeModal={this.props.changeModal} formData={this.props.formData}/>
+			      	{this.props.formData != undefined ? 
+			        	<Form_name changeModal={this.props.changeModal} formData={this.props.formData}/>
+			        	:
+			        	<Form_name changeModal={this.props.changeModal}/>
+			        }	
 			      </Modal.Body>
 			    </Modal>
             </Aux>

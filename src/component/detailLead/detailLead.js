@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import Aux from "../../utils/Aux/aux.js";
+import {withRouter} from "react-router-dom";
 import "./detailLead.css";
 import {getCommentData} from "../../dataParser/getListData";
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class DetailLead extends Component {
 
@@ -11,32 +14,54 @@ class DetailLead extends Component {
     	super(props);
     	this.state = {
       		showLoader : false,
-      		commentState : ''
+      		commentState : '',
+      		commentStuts : false,
     	};
   	}
 
-	commentsData = async ()=>{
+	commentsData = async (id)=>{
 
-      	// this.setState({showLoader : true});
+      	this.setState({showLoader : true});
 		var commentRes = {};
-		console.log(this.div);
-		let leadId = this.div.getAttribute('data');
+		var commentReq = {};
+		let leadId = id;
+		console.log("YYYYYYYYYYYYYYY=====>",leadId);
 
-		// commentRes = await getCommentData(leadId);
+        var listData = {};
+        listData.size = 4;
+        listData.pageId = 1;
+        listData.filters = [];
 
-		// if(commentRes.meta.status === 200){
+        commentReq.id = leadId;
+        commentReq.data = listData;
 
-		// 	this.setState({
-	 //        	commentState :commentRes,
-	 //        	showLoader : false
-	 //        })
-		// }else{
+		commentRes = await getCommentData(commentReq);
 
-		// 	this.setState({
-	 //        	commentState :commentRes,
-	 //        	showLoader : false
-	 //        })
-		// }
+		console.log("XXXXXXXXXXXXXXXXXXXX=====>",commentRes);
+		if(commentRes.meta.status === 200){
+
+			this.setState({
+	        	commentState :commentRes,
+	        	showLoader : false,
+	 			commentStuts : true
+	        })
+		}else if(commentRes.meta.status === 401){
+    		
+    		localStorage.clear();
+    		this.props.history.push("/login");
+    		
+    	}
+		else{
+
+			this.setState({
+	        	commentState :commentRes,
+	        	showLoader : false
+	        })
+		}
+	}
+
+	componentWillUnmount() {
+	   alert("do you want to exit?");
 	}
 
     render() {
@@ -45,10 +70,10 @@ class DetailLead extends Component {
     	let leadDetailMeta = leadDetail.meta;
     	let leadDetailData = leadDetail.data;
 
-    	const {commentState} = this.state;
-    	// console.log("wwwwwwwwwwwwwwwwwwwwwww",leadDetailMeta.status);
-    	// let commentStateMeta = commentState.meta;
-    	// let commentStateData = commentState.data;
+    	const {commentState,commentStuts} = this.state;
+    	console.log("wwwwwwwwwwwwwwwwwwwwwww",leadDetailMeta.status);
+    	let commentStateMeta = commentState.meta;
+    	let commentStateData = commentState.data;
 		// {commentStateMeta.status == 200 ? 
 
 
@@ -415,160 +440,52 @@ class DetailLead extends Component {
 			      		</div>
 
 			      		<div className="row">
-			      			<div className="col-md-12 commnets" onClick={this.commentsData} data="421038" ref={(ref) => this.div = ref}>
+			      			<div className="col-md-12 commnets" onClick={()=>this.commentsData(leadDetailData.lead_id)}>
 			      				<span className="mr-3">Comments(4)</span>
 		      				</div>
 			      		</div>
+			      		{commentStuts === true ? 
+			      			(commentStateMeta.status === 200 ? 
+					      		<PerfectScrollbar>
+					      			<div className="commentBox"> 
+							      		<div className="card shadow pt-2 pb-2 mb-2">
+							      			<div className="Comment_row d-flex mb-2">
+							      				<div className="col-md-6">
+							      					<span className="font-small"><b>Name : </b></span>
+							      					<span className="font-small">Suarbh Sharma</span>
+							      				</div>
+							      				<div className="col-md-6">
+							      					<span className="font-small"><b>Date : </b></span>
+							      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
+							      				</div>
+							      			</div>
+							      			<div className="d-flex">
+							      				<div className="col-md-12">
+							      					<span className="font-small"><b>Comment : </b></span>
+							      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
+							      				</div>
+							      			</div>
+							      		</div>
 
-			      		<PerfectScrollbar>
-			      			<div className="commentBox"> 
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
+							      		<div className="col-md-12 commnets" data="421038" ref={(ref) => this.div = ref}>
+						      				<span className="mr-3">show more</span>
 					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
+						      		</div>
+					      		</PerfectScrollbar>
+					      		:
+				      			<div className="commentBox"> 
+						      		<div className="card shadow pt-2 pb-2 mb-2">
+						      			<div className="Comment_row d-flex mb-2">
+						      				<div className="col-md-12">
+						      					<span className="font-small"><b>Ooops No comments!!!</b></span>
+						      				</div>
+						      			</div>
+						      		</div>
 					      		</div>
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
-					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
-					      		</div>
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
-					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
-					      		</div>
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
-					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
-					      		</div>
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
-					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
-					      		</div>
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
-					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
-					      		</div>
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
-					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
-					      		</div>
-					      		<div className="card shadow pt-2 pb-2 mb-2">
-					      			<div className="Comment_row d-flex mb-2">
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Name : </b></span>
-					      					<span className="font-small">Suarbh Sharma</span>
-					      				</div>
-					      				<div className="col-md-6">
-					      					<span className="font-small"><b>Date : </b></span>
-					      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-					      				</div>
-					      			</div>
-					      			<div className="d-flex">
-					      				<div className="col-md-12">
-					      					<span className="font-small"><b>Comment : </b></span>
-					      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-					      				</div>
-					      			</div>
-					      		</div>
-				      		</div>
-			      		</PerfectScrollbar>
-
+			      			)
+				      		:
+				      		''
+				      	}	
 			      		
 			      	</div>  	
 			      	:
@@ -579,11 +496,13 @@ class DetailLead extends Component {
 			      		</div>
 			      	}	
 			      </Modal.Body>
-			      
+			      <Backdrop className="backDoor" open={this.state.showLoader}>
+			        <CircularProgress color="inherit" />
+			      </Backdrop>
 			    </Modal>
             </Aux>
         );
     };
 };    
 
-export default DetailLead;
+export default withRouter(DetailLead);

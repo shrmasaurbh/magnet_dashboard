@@ -116,7 +116,7 @@ class SpeedDialLead extends React.Component {
               href='/leads/open'
             />
         </SpeedDial>
-        <LeadModel show={this.state.addModalShow} fromType="addProject" changeModal={this.handleModal}/>
+        <LeadModel show={this.state.addModalShow} fromType="addLead" changeModal={this.handleModal}/>
 
       </div>
     );

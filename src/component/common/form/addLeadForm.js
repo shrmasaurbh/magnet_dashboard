@@ -427,8 +427,7 @@ class addLeadForm extends Component {
 								<div className="row">
 									<div className="col-sm-6 mb-3">
 										<FormControl>
-										    <InputLabel id="demo-controlled-open-select-label">Project C
-										    ity</InputLabel>
+										    <InputLabel id="demo-controlled-open-select-label">Project City</InputLabel>
 									        <Select
 											  error = {this.state.errors.p_city !== '' ? 'error' : ''}
 									          labelId="demo-controlled-open-select-label"

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 
 import Aux from "../../utils/Aux/aux.js"
 import "./header.css";
-import Filter from "../filter/filter";
+// import Filter from "../filter/filter";
 import chets from "../../assets/image/chets.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faComments, faSearch, faBars, faBell, faFilter} from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +14,6 @@ class Header extends Component {
     	super(props);
     	this.state = {
       		visibility: false,
-            showFilter: false,
       		notify : false,
             screenWidth: 0,
             mobileSearch : false 
@@ -35,18 +34,18 @@ class Header extends Component {
         this.setState({ mobileSearch: !this.state.mobileSearch });
     }
 
-    handlePopUp =()=> {
-        // if (!this.state.showFilter) {
-        //   // attach/remove event handler
-        //   document.addEventListener('click', this.handleOutsideClick, false);
-        // } else {
-        //   document.removeEventListener('click', this.handleOutsideClick, false);
-        // }
+    // handlePopUp =()=> {
+    //     // if (!this.state.showFilter) {
+    //     //   // attach/remove event handler
+    //     //   document.addEventListener('click', this.handleOutsideClick, false);
+    //     // } else {
+    //     //   document.removeEventListener('click', this.handleOutsideClick, false);
+    //     // }
 
-        this.setState(prevState => ({
-           showFilter: !prevState.showFilter,
-        }));
-    }
+    //     this.setState(prevState => ({
+    //        showFilter: !prevState.showFilter,
+    //     }));
+    // }
 
     // handleOutsideClick=(e)=> {
         
@@ -93,15 +92,6 @@ class Header extends Component {
                         </div>
                     </form>
                     <ul className="navbar-nav ml-auto">
-                        <li className="nav-item dropdown">
-                            <span className="nav-link" data-toggle="dropdown" onClick ={this.handlePopUp}>
-                            	<FontAwesomeIcon icon={faFilter} className="nav-icon" />
-                                <span className="badge navbar-badge">Filter</span>
-                            </span>
-                            <div className={"filterMenu" + " "+ (this.state.showFilter ? 'filterMenuShow' : '')} ref={node => { this.node = node; }}>
-                                <Filter />
-                            </div>
-                        </li>
 
                         <li className="nav-item dropdown">
                             <span className="nav-link" data-toggle="dropdown" onClick ={()=> this.setState({visibility : !this.state.visibility})}>
@@ -219,15 +209,7 @@ class Header extends Component {
                         </div>
                     </form>
                     <ul className="navbar-nav ml-auto">
-                        <li className="nav-item dropdown" ref={node => { this.node = node; }}>
-                            <span className="nav-link pr-0" data-toggle="dropdown" onClick ={this.handlePopUp}>
-                                <FontAwesomeIcon icon={faFilter} className="nav-icon" />
-                                <span className="badge">Filter</span>
-                            </span>
-                            <div className={"filterMenu" + " "+ (this.state.showFilter ? 'filterMenuShow' : '')}>
-                                <Filter />
-                            </div>
-                        </li>
+                        
                         <li className="nav-item dropdown">
                             <span className="nav-link pr-3" data-toggle="dropdown" onClick ={()=> this.setState({visibility : !this.state.visibility})}>
                                 <FontAwesomeIcon icon={faComments} className="nav-icon" />

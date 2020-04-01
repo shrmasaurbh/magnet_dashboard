@@ -7,5 +7,3 @@ export const getDashboardData = async () =>{
 	console.log('getDashboard ===>', getDashboard);
 	return  getDashboard;
 }
-
-

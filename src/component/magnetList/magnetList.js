@@ -5,12 +5,14 @@ import Aux from "../../utils/Aux/aux.js";
 import {getListData, getFullLeadData} from "../../dataParser/getListData";
 import Pagination from "react-js-pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faInfo,faUserSecret, faCalendarAlt, faChevronDown, faMapMarkerAlt, faAd, faUser, faBuilding, faCommentAlt, faPhoneAlt} from "@fortawesome/free-solid-svg-icons";
+import {faEdit, faFilter,faInfo,faUserSecret, faCalendarAlt, faMapMarkerAlt, faAd, faUser, faBuilding, faCommentAlt, faPhoneAlt} from "@fortawesome/free-solid-svg-icons";
 import {faWhatsapp} from "@fortawesome/free-brands-svg-icons";
 import {faUsertie} from "@fortawesome/free-regular-svg-icons";
 import DetailLead from "../detailLead/detailLead";
 import Loader from "../../component/common/loader/loader";
 import SpeedDialLead from "../../component/common/material/leadSpeedDail";
+import LeadUpdateModel from "../../component/common/modal/leadUpdateMOdal";
+import Filter from "../filter/filter";
 
 class magnetList extends Component {
 
@@ -18,13 +20,16 @@ class magnetList extends Component {
     	super(props);
     	this.state = {
       		listDetail: false,
+      		formType: '',
       		meta : props.listValue.meta,
       		data : props.listValue.data,
       		activePage : 1,
       		filters : [],
       		modalShow : false,
+      		modalLeadShow : false,
       		fullDetail : '',
-      		showLoader : false
+      		showLoader : false,
+      		showFilter : false,
     	};
   	}
 
@@ -142,6 +147,18 @@ class magnetList extends Component {
         this.setState({modalShow : !this.state.modalShow});
     }
 
+    handleLeadModal=(value)=>{
+        console.log("value=================>",value);
+        this.setState({modalLeadShow : !this.state.modalLeadShow});
+        this.setState({formType : value});
+    }
+
+    handlePopUp =()=> {
+        this.setState(prevState => ({
+           showFilter: !prevState.showFilter,
+        }));
+    }
+
 
 	render(){
 
@@ -158,12 +175,21 @@ class magnetList extends Component {
 				<Loader show={this.state.showLoader}/>
 				{status === 200 ?
 					<div className="listContainer">
-						<div className="p-3">
+						<div className="p-3 leadMainHeader">
 							<span className="totalCount">Total Leads : </span>
 							<span>{count}</span>
+							<div className="d-inline ml-3 filterHeader">
+		                            <span className="filter" onClick ={this.handlePopUp}>
+		                            	<FontAwesomeIcon icon={faFilter} className="nav-icon" />
+		                                <span className="badge navbar-badge">Filter</span>
+		                            </span>
+		                            <div className={"filterMenu" + " "+ (this.state.showFilter ? 'filterMenuShow' : '')} ref={node => { this.node = node; }}>
+		                                <Filter />
+		                            </div>
+							</div>
 						</div>
 							{this.state.data.map((listVal,index) => 
-								<div className="MainList" key={listVal.lead_id}>
+								<div className="MainList mt-2" key={listVal.lead_id}>
 							        <div className="container-fluid">
 							            <div className="ListContent card mb-2" onClick={() => this.detailView(index)}>
 							                <div className="row mb-1">
@@ -222,9 +248,10 @@ class magnetList extends Component {
 							                        </div>
 							                    </div>
 							                </div>
-							                <a className="Action" data-toggle="tooltip" data-placement="bottom" title="View detail" onClick={() => this.detailView(index)}>
-							                	<FontAwesomeIcon icon={this.state.listDetail === index ? faChevronDown : faChevronLeft} className="text-white"/>
+							                <a className="Action" data-toggle="tooltip" data-placement="bottom" title="View detail" onClick={(value)=>this.handleLeadModal(listVal.lead_status.status)}>
+							                	<FontAwesomeIcon icon={faEdit} className="text-white"/>
 						                	</a>
+        									
 								            <a className="callBG Action d-none d-md-block" data-toggle="tooltip" data-placement="bottom" title="Call">
 								            	<FontAwesomeIcon icon={faPhoneAlt} className="text-white"/>
 							            	</a>
@@ -358,6 +385,7 @@ class magnetList extends Component {
 				</div>
 			}
 		    </div>
+				<LeadUpdateModel show={this.state.modalLeadShow} fromType={this.state.formType} changeModal={this.handleLeadModal}/>
 			</Aux>
 		);
 	};

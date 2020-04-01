@@ -13,6 +13,7 @@
     padding: 20px;
     position:relative;
     min-height: 118px;
+    cursor: pointer;
 }
 .MainList .ListContent:before {
     content: '';
@@ -149,6 +150,21 @@
     font-size: 12px;
 }
 
+.leadMainHeader{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 3em;
+    z-index: 1020;
+    background-color: #fff;
+}
+
+.filterHeader{
+    cursor: pointer;
+    color: rgba(0,0,0,.5);
+}
+.filterRow{
+    margin-left: 0px!important;
+}
 
 @media(max-width:767px){
     .ActionSection{display:block;}

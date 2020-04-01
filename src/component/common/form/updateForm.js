@@ -37,11 +37,12 @@ class updateForm extends Component {
       		builder_name : '',
       		region : '',
       		region_id : '',
+      		region_name : '',
       		location : '',
       		project_id_99 : '',
       		project_status : false,
             sweetShow:false,
-            type : "",
+            type : "success",
             title : "",
             option: [] ,
             isLoading : false,
@@ -78,7 +79,51 @@ class updateForm extends Component {
 	        this.setState({region : regionData})
 	    }
 
+	    console.log("in the 11111111111111111111111111111111111",this.props.formData);
+	    if(this.props.formData !== undefined){
+		    if(this.props.formData.meta.status === 200){
+		    	console.log("YeSSSSSSSSSSSSSSSSS");
+		    	let autoFill = this.props.formData.data;
+		    	console.log("XXXXXXXXXXXXXXXXXXXXXXX",autoFill);
+		    	console.log("XXXXXXXXXXXXXXXXXXXXXXX",autoFill.location);
+
+		    	this.setState({
+		    		project_name : autoFill.project_name, 
+		    		project_id : autoFill.project_id,
+		    		option : [{project_id : autoFill.project_id,project_name : autoFill.project_name}], 
+		    		builder_name : autoFill.builder_name, 
+		    		location : autoFill.location, 
+		    		project_status : autoFill.project_status, 
+		    		project_id_99 : autoFill.project_id_99, 
+		    		region_id : autoFill.region.region_id, 
+		    	})
+		    }
+		}else{
+			return 0
+		}    
+
 	}
+
+	// componentDidUpdate(prevProps,nextProps){
+	    
+
+	//     if(prevProps.formData.data.project_name !== nextProps.project_name){
+	//     	console.log("YeSSSSSSSSSSSSSSSSS");
+	//     	let autoFill = prevProps.formData.data;
+	//     	console.log("XXXXXXXXXXXXXXXXXXXXXXX",autoFill);
+	//     	console.log("XXXXXXXXXXXXXXXXXXXXXXX",autoFill.location);
+
+	//     	this.setState({
+	//     		project_name : autoFill.project_name, 
+	//     		project_id : autoFill.project_id,
+	//     		option : [{project_id : autoFill.project_id,project_name : autoFill.project_name}], 
+	//     		builder_name : autoFill.builder_name, 
+	//     		location : autoFill.location, 
+	//     		project_status : autoFill.project_status, 
+	//     		project_id_99 : autoFill.project_id_99, 
+	//     	})
+	//     }
+	// }	
 
 	onChange = (e) => {
 
@@ -268,9 +313,8 @@ class updateForm extends Component {
 
     render() {
 
-	    const {region, sweetShow, type, title, option, isLoading,region_id} = this.state;
-	    console.log("in the render", this.props.formData);
-	    const formData = this.props.formData.data;
+	    const {region, sweetShow, type, title, option, isLoading,region_id,region_name} = this.state;
+	    console.log("in the render", this.state);
 
         return (
             <Aux>
@@ -291,7 +335,11 @@ class updateForm extends Component {
 										      onChange={(_event, option) => {
 										        console.log(option);
 										        if (option === null) {
-										        	this.setState({option: []})
+										        	this.setState({
+										        		option: [],
+											        	project_name : '',
+											        	project_id : '',
+										        	})
 										        }else{
 										        	this.setState({
 											        	project_name : option.project_name,
@@ -306,7 +354,7 @@ class updateForm extends Component {
 										          label="Project Name"
 										          fullWidth
 										          onChange={this.handleAutoChange}
-								          	  		helperText={this.state.errors.project_name !== '' ? this.state.errors.project_name : ''} 
+								          	  		helpertext={this.state.errors.project_name !== '' ? this.state.errors.project_name : ''} 
 										          InputProps={{
 										            ...params.InputProps,
 										            startAdornment: (
@@ -338,7 +386,7 @@ class updateForm extends Component {
 										        id="builder_name"
 										        name="builder_name"
 										        label="Builder Name"
-									        	helperText={this.state.errors.builder_name !== '' ? this.state.errors.builder_name : ''}
+									        	helpertext={this.state.errors.builder_name !== '' ? this.state.errors.builder_name : ''}
 										        onChange={this.onChange}
 										        InputProps={{
 										          startAdornment: (
@@ -361,7 +409,7 @@ class updateForm extends Component {
 									          	labelId="demo-controlled-open-select-label"
 									          	value={region_id}
 									          	onChange={this.onChange}
-									      		helperText={this.state.errors.region_id !== '' ? this.state.errors.region_id : ''}
+									      		helpertext={this.state.errors.region_id !== '' ? this.state.errors.region_id : ''}
 									        	inputProps={{
 									            	name: 'region_id',
 									            	id: 'region_id',
@@ -390,7 +438,7 @@ class updateForm extends Component {
 										        id="location"
 										        name="location"
 										        label="Location"
-									        	helperText={this.state.errors.location !== '' ? this.state.errors.location : ''}
+									        	helpertext={this.state.errors.location !== '' ? this.state.errors.location : ''}
 										        onChange={this.onChange}
 										        InputProps={{
 										          startAdornment: (
@@ -414,7 +462,7 @@ class updateForm extends Component {
 										        id="project99"
 										        name="project_id_99"
 										        label="99 Project ID"
-									        	helperText={this.state.errors.project_id_99 !== '' ? this.state.errors.project_id_99 : ''}
+									        	helpertext={this.state.errors.project_id_99 !== '' ? this.state.errors.project_id_99 : ''}
 										        onChange={this.onChange}
 										        InputProps={{
 										          startAdornment: (
@@ -431,6 +479,7 @@ class updateForm extends Component {
 								    <div className="form-group">
 										<FormControlLabel
 								          value={this.state.project_status}
+								          checked={ this.state.project_status}
 								          name="project_status"
 								          control={<Switch color="primary" />}
 								          label="Project Status"

@@ -1,11 +1,13 @@
 import React, {Component} from "react";
 import "./filter.css";
 import Aux from "../../utils/Aux/aux";
+import {withRouter} from "react-router-dom";
 import { Multiselect } from 'multiselect-react-dropdown';
 import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import {getAutoCompleteProject} from "../../dataParser/getProjectData";
+import {getAutoCompleteProject,getRegion} from "../../dataParser/getProjectData";
+import {getUserListData} from "../../dataParser/getListUserData";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -18,6 +20,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import BusinessRoundedIcon from '@material-ui/icons/BusinessRounded';
 
 class Filter extends Component { 
 
@@ -25,23 +29,34 @@ class Filter extends Component {
     	super(props);
 		this.state = {
 			option: [] ,
+			userName: [] ,
             isLoading : false,
-            assignedDate_from : new Date(),
-            assignedDate_to : new Date(),
-            commingDate_from : new Date(),
-            commingDate_to : new Date(),
-            closedDate_from : new Date(),
-            closedDate_to : new Date(),
-            visitDate_from : new Date(),
-            visitDate_to : new Date(),
-            hpOpDate_from : new Date(),
-            hpOpDate_to : new Date(),
-            followDate_from : new Date(),
-            followDate_to : new Date(),
-            lastUpdateDate_from : new Date(),
-            lastUpdateDate_to : new Date(),
+            assignedDate_from : null,
+            assignedDate_to : null,
+            commingDate_from : null,
+            commingDate_to : null,
+            closedDate_from : null,
+            closedDate_to : null,
+            visitDate_from : null,
+            visitDate_to : null,
+            hpOpDate_from : null,
+            hpOpDate_to : null,
+            followDate_from : null,
+            followDate_to : null,
+            lastUpdateDate_from : null,
+            lastUpdateDate_to : null,
             city : '',
             closeReason : '',
+            project_name : '',
+            project_id : '',
+            lead_id : '',
+            source : '',
+            region : '',
+            region_id : '',
+            mobile_num : '',
+            client_id : '',
+            magnet_lead_rm : '',
+            pre_sale_rm : '',
             visit_status : '',
             hpOpStaus : '',
             magnet_lead : '',
@@ -50,19 +65,34 @@ class Filter extends Component {
 		};
 	}
 
-	handleAutoChange = async (e) =>{
+	async componentDidMount(){
+
+		var regionData = await getRegion();
+
+	    if(regionData.meta.status === 200){
+
+	        this.setState({region : regionData})
+	    }else{
+
+	        this.setState({region : regionData})
+	    }
+
+
+	}
+
+	handleAutoUserChange = async (e) =>{
 		this.setState({isLoading:true});
 		let value = e.target.value 
 		console.log("valueXXXXXXXXXXXXXXXX",value);
 
-	    var regionData = await getAutoCompleteProject(value);
+	    var getUserData = await getUserListData(value);
 
-		console.log("regionData.dataXXXXXXXXXXXXXXXX",regionData.data);
-	    if(regionData.meta.status === 200){
+		console.log("getUserData.dataXXXXXXXXXXXXXXXX",getUserData.data);
+	    if(getUserData.meta.status === 200){
 
 			this.setState({isLoading:false});
-	        this.setState({option : regionData.data})
-	    }else if(regionData.meta.status === 401){
+	        this.setState({userName : getUserData.data})
+	    }else if(getUserData.meta.status === 401){
     		
     		localStorage.clear();
     		this.props.history.push("/login");
@@ -70,7 +100,32 @@ class Filter extends Component {
     	}else{
 
 			this.setState({isLoading:false});
-	        this.setState({option : regionData})
+	        this.setState({userName : getUserData})
+	    }
+
+	}
+
+	handleAutoChange = async (e) =>{
+		this.setState({isLoading:true});
+		let value = e.target.value 
+		console.log("valueXXXXXXXXXXXXXXXX",value);
+
+	    var projectListData = await getAutoCompleteProject(value);
+
+		console.log("projectListData.dataXXXXXXXXXXXXXXXX",projectListData.data);
+	    if(projectListData.meta.status === 200){
+
+			this.setState({isLoading:false});
+	        this.setState({option : projectListData.data})
+	    }else if(projectListData.meta.status === 401){
+    		
+    		localStorage.clear();
+    		this.props.history.push("/login");
+    		
+    	}else{
+
+			this.setState({isLoading:false});
+	        this.setState({option : projectListData})
 	    }
 
 	}
@@ -86,9 +141,47 @@ class Filter extends Component {
 		this.setState({[event.target.name]: event.target.value});
   	};
 
+  	resetFilter = () =>{
+
+  		this.setState({
+  			option: [] ,
+            isLoading : false,
+            assignedDate_from : null,
+            assignedDate_to : null,
+            commingDate_from : null,
+            commingDate_to : null,
+            closedDate_from : null,
+            closedDate_to : null,
+            visitDate_from : null,
+            visitDate_to : null,
+            hpOpDate_from : null,
+            hpOpDate_to : null,
+            followDate_from : null,
+            followDate_to : null,
+            lastUpdateDate_from : null,
+            lastUpdateDate_to : null,
+            city : '',
+            closeReason : '',
+            project_name : '',
+            project_id : '',
+            lead_id : '',
+            source : '',
+            region : '',
+            mobile_num : '',
+            client_id : '',
+            magnet_lead_rm : '',
+            pre_sale_rm : '',
+            visit_status : '',
+            hpOpStaus : '',
+            magnet_lead : '',
+            presale_lead : '',
+            client_type : ''
+  		})
+  	}
+
 	render(){
 
-		const {option,client_type,isLoading,assignedDate_from,assignedDate_to,commingDate_from,commingDate_to,closedDate_from,closedDate_to,visitDate_from,visitDate_to,hpOpDate_from,hpOpDate_to,followDate_from,followDate_to,lastUpdateDate_from,lastUpdateDate_to,city,closeReason,visit_status,hpOpStaus,magnet_lead,presale_lead} = this.state;
+		const {option,client_type,userName,isLoading,region_id,region,assignedDate_from,assignedDate_to,commingDate_from,commingDate_to,closedDate_from,closedDate_to,visitDate_from,visitDate_to,hpOpDate_from,hpOpDate_to,followDate_from,followDate_to,lastUpdateDate_from,lastUpdateDate_to,city,closeReason,visit_status,hpOpStaus,magnet_lead,presale_lead} = this.state;
 		console.log("cityXXXXXXXXXXXX",this.state)
 		// console.log("closeReasonXXXXXXXXXXXX",closeReason)
 
@@ -109,14 +202,14 @@ class Filter extends Component {
 								      loading={isLoading}
 								      renderTags={(value, getTagProps) =>
 									    value.map((option, index) => (
-									      <Chip label={option.project_name} {...getTagProps({ index })} disabled={index === 0} />
+									      <Chip label={option.project_name} {...getTagProps({ index })}/>
 									    ))
 									  }
 								      onChange={(_event, option) => {
 								        console.log(option);
+								        var projectId = option.map((ops) => ops.project_id);
 								        this.setState({
-								        	project_name : option.project_name,
-								        	project_id : option.project_id
+								        	project_id : projectId,
 								        })
 
 								        if (option === null) {
@@ -150,6 +243,7 @@ class Filter extends Component {
 								<div className="form-group">
 									<TextField
 							          required
+							          value={this.state.lead_id}
 							          id="lead_id"
 							          name="lead_id"
 							          label="Lead ID"
@@ -165,6 +259,7 @@ class Filter extends Component {
 								<div className="form-group">
 									<TextField
 							          required
+							          value={this.state.source}
 							          id="source"
 							          name="source"
 							          onChange={this.handleChange}
@@ -203,22 +298,35 @@ class Filter extends Component {
 						</div>
 						<div className="row filterRow">
 							<div className="col-lg-6 col-sm-6 col-6">
-								<div className="form-group">
-									<TextField
-							          required
-							          id="region"
-							          name="region"
-							          onChange={this.handleChange}
-							          label="Region"
-							          defaultValue=""
-							          helperText=""
-							        />
-								</div>
+								<FormControl>
+								    <InputLabel id="demo-controlled-open-select-label">Region</InputLabel>
+							        <Select
+							          	labelId="demo-controlled-open-select-label"
+							          	value={region_id}
+							          	onChange={this.handleChange}
+							        	inputProps={{
+							            	name: 'region_id',
+							            	id: 'region_id',
+							          	}}
+							        >
+							          	<MenuItem value="">
+							            	<em>None</em>
+							          	</MenuItem>
+							          	{region.data ?
+				    						(region.data.map(reg=>
+						          				<MenuItem value={reg.region_id} key={reg.region_id}>{reg.region_name}</MenuItem>
+			    							))   	
+									      	:
+									      	''
+									    }  	
+							        </Select>
+								</FormControl>
 							</div>
 							<div className="col-lg-6 col-sm-6 col-6">
 								<div className="form-group">
 									<TextField
 							          required
+							          value={this.state.mobile_num}
 							          id="mobile_num"
 							          name="mobile_num"
 							          onChange={this.handleChange}
@@ -316,6 +424,7 @@ class Filter extends Component {
 								<div className="form-group">
 									<TextField
 							          required
+							          value={this.state.client_id}
 							          id="client_id"
 							          name="client_id"
 							          onChange={this.handleChange}
@@ -331,6 +440,7 @@ class Filter extends Component {
 								<div className="form-group">
 									<TextField
 							          required
+							          value={this.state.magnet_lead_rm}
 							          id="magnet_lead_rm"
 							          name="magnet_lead_rm"
 							          onChange={this.handleChange}
@@ -342,17 +452,49 @@ class Filter extends Component {
 								</div>
 							</div>
 							<div className="col-sm-6 col-6">	
-								<div className="form-group">
-									<TextField
-							          required
-							          id="pre_sale_rm"
-							          name="pre_sale_rm"
-							          onChange={this.handleChange}
-							          label="PreSale Rm"
-							          defaultValue=""
-							          helperText=""
+								<Autocomplete
+								  multiple	
+							      id="asynchronous-demo"
+							      getOptionSelected={(userName, value) => userName.name === value.name}
+							      getOptionLabel={userName => userName.name}
+							      options={userName}
+							      loading={isLoading}
+							      renderTags={(value, getTagProps) =>
+								    value.map((userName, index) => (
+								      <Chip label={userName.name} {...getTagProps({ index })}/>
+								    ))
+								  }
+							      onChange={(_event, userName) => {
+							        console.log(userName);
+							        var projectId = userName.map((ops) => ops.user_id);
+							        this.setState({
+							        	pre_sale_rm : projectId,
+							        })
+
+							        if (option === null) {
+							        	this.setState({option: []})
+							        }
+							      }}
+							      renderInput={params => (
+							        <TextField
+							          {...params}
+							          label="PreSale RM"
+							          fullWidth
+							          onChange={this.handleAutoChange}
+							          InputProps={{
+							            ...params.InputProps,
+							            endAdornment: (
+							              <React.Fragment>
+							                {isLoading ? (
+							                  <CircularProgress color="inherit" size={20} />
+							                ) : null}
+							                {params.InputProps.endAdornment}
+							              </React.Fragment>
+							            )
+							          }}
 							        />
-								</div>
+							      )}
+							    />
 							</div>
 						</div>
 						<div className="row filterRow mb-2">
@@ -714,7 +856,7 @@ class Filter extends Component {
 							</div>
 							<div className="col-sm-6 col-6">	
 								<div className="form-group">
-									<button type="submit" className="btn btn-danger">Reset</button>
+									<button type="submit" className="btn btn-danger" onClick={this.resetFilter}>Reset</button>
 								</div>
 							</div>	
 						</div>	
@@ -723,4 +865,4 @@ class Filter extends Component {
 	};
 };
 
-export default Filter;
+export default withRouter(Filter);

@@ -67,36 +67,38 @@ class SpeedDialProject extends React.Component {
     const { hidden, open } = this.state;
 
     return (
-      <div className={classes.root}>
-        <SpeedDial
-          ariaLabel="SpeedDial tooltip example"
-          className={classes.speedDial}
-          hidden={hidden}
-          icon={<SpeedDialIcon />}
-          onBlur={this.handleClose}
-          onClick={this.handleClick}
-          onClose={this.handleClose}
-          onFocus={this.handleOpen}
-          onMouseEnter={this.handleOpen}
-          onMouseLeave={this.handleClose}
-          open={open}
-        >
-            <SpeedDialAction
-              key="Add"
-              icon=<AddIcon />
-              tooltipTitle="Add Project"
-              onClick={this.handleModal}
-            />
-            <SpeedDialAction
-              key="Edit"
-              icon=<EditIcon />
-              tooltipTitle="Update Project"
-              onClick={this.updateHandleModal}
-            />
-        </SpeedDial>
+      <div>
+        <div className={classes.root}>
+          <SpeedDial
+            ariaLabel="SpeedDial tooltip example"
+            className={classes.speedDial}
+            hidden={hidden}
+            icon={<SpeedDialIcon />}
+            onBlur={this.handleClose}
+            onClick={this.handleClick}
+            onClose={this.handleClose}
+            onFocus={this.handleOpen}
+            onMouseEnter={this.handleOpen}
+            onMouseLeave={this.handleClose}
+            open={open}
+          >
+              <SpeedDialAction
+                key="Add"
+                icon=<AddIcon />
+                tooltipTitle="Add Project"
+                onClick={this.handleModal}
+              />
+              <SpeedDialAction
+                key="Edit"
+                icon=<EditIcon />
+                tooltipTitle="Update Project"
+                onClick={this.updateHandleModal}
+              />
+          </SpeedDial>
+
+        </div>
         <ProjectModel show={this.state.addModalShow} fromType="addProject" changeModal={this.handleModal}/>
         <ProjectModel show={this.state.updateModalShow} fromType="updateProject" changeModal={this.updateHandleModal}/>
-
       </div>
     );
   }

@@ -2,19 +2,18 @@ import React, {Component} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import Aux from "../../../utils/Aux/aux.js";
 import AddLeadForm from "../form/addLeadForm";
-import updateForm from "../form/updateForm";
+// import updateLeadForm from "../form/updateLeadForm";
 
 
 class LeadModal extends Component {
     render() {
-			        // <AddProjectForm changeModal={this.props.changeModal}/>
 
-  //   	const FROMS_TYPES = {
-		// 	"addProject" : AddProjectForm,
-		// 	"updateProject" : updateForm,
-		// }
-		// const Form_name = FROMS_TYPES[this.props.fromType];
-			          // {Form_name === AddProjectForm ? "Add Project" : "Update Project"}
+    	const FROMS_TYPES = {
+			"addLead" : AddLeadForm,
+			// "updateLead" : updateLeadForm,
+		}
+		console.log(this.props.fromType);
+		const Form_name = FROMS_TYPES[this.props.fromType];
 
         return (
             <Aux>
@@ -27,11 +26,11 @@ class LeadModal extends Component {
 			    >
 			      <Modal.Header closeButton>
 			        <Modal.Title id="contained-modal-title-vcenter">
-			        	Add Lead
+			          	{Form_name === AddLeadForm ? "Add Lead" : "Update Lead"}
 			        </Modal.Title>
 			      </Modal.Header>
 			      <Modal.Body>
-			        <AddLeadForm changeModal={this.props.changeModal}/>
+			        <Form_name changeModal={this.props.changeModal}/>
 			      </Modal.Body>
 			    </Modal>
             </Aux>

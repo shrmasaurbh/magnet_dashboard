@@ -32,7 +32,7 @@ class addProjectFrom extends Component {
       		location : '',
       		project_id_99 : '',
             sweetShow:false,
-            type : "",
+            type : "success",
             title : "",
             errorInput: false,
             errors : {

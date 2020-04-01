@@ -21,7 +21,8 @@ class projectDetail extends Component {
         	meta : props.projectDataValue.meta,
       		data : props.projectDataValue.data,
       		modalShow : false,
-      		fullDetail : ''
+      		fullDetail : '',
+      		updateModalShow : false
 		};
 	}
 
@@ -242,7 +243,7 @@ class projectDetail extends Component {
 						            		>
 							            		<FontAwesomeIcon icon={faEdit} className="text-white"/>
 						            		</a>
-        									{status === 200 &&
+        									{fullDetail.meta &&
 	        									<ProjectModel show={this.state.updateModalShow} formData={fullDetail} fromType="updateProject" changeModal={this.updateHandleModal}/>
         									}
 

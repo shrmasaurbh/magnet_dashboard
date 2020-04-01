@@ -83,8 +83,10 @@ export const getAddLeadData = async (value) =>{
 
 export const getCommentData = async (value) =>{
 
-	console.log(value);
-	// let fullListData = await post('/leads/list',value)
-	// return  fullListData;
+	console.log("valuee============>",value);
+
+	let commentData = await post('/comments/'+value.id, value.data)
+	console.log("commentData============>",commentData);
+	return  commentData;
 
 }
