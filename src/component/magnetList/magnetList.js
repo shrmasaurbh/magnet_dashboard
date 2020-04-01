@@ -159,6 +159,24 @@ class magnetList extends Component {
         }));
     }
 
+    handleFilter = async (filterData) => {
+        this.setState({showLoader : true})
+        this.setState({filters : filterData})
+		// console.log("===========FilterVal==========");
+		// console.log(filterData);
+        // let filters = [];
+        // const procName = this.props.inputValue
+    	let listData = {};
+    	listData.filters = [];
+        listData.query = this.props.inputValue;
+        listData.size = 8;
+        listData.pageId = 1;
+        listData.filters = [filterData];
+
+    	// console.log("listData.filters",listData.filters);
+        this.genericGetListData(listData);
+
+    }
 
 	render(){
 
@@ -171,20 +189,19 @@ class magnetList extends Component {
 
 			<Aux>
 				<div className={"content-wrapper"+" "+(this.props.expand ? 'main-header-collapsed' : '')}>
-				<SpeedDialLead />
 				<Loader show={this.state.showLoader}/>
 				{status === 200 ?
 					<div className="listContainer">
-						<div className="p-3 leadMainHeader">
+						<SpeedDialLead />
+						<div className="p-2 pt-3 pb-3 leadMainHeader">
 							<span className="totalCount">Total Leads : </span>
 							<span>{count}</span>
 							<div className="d-inline ml-3 filterHeader">
 		                            <span className="filter" onClick ={this.handlePopUp}>
 		                            	<FontAwesomeIcon icon={faFilter} className="nav-icon" />
-		                                <span className="badge navbar-badge">Filter</span>
 		                            </span>
 		                            <div className={"filterMenu" + " "+ (this.state.showFilter ? 'filterMenuShow' : '')} ref={node => { this.node = node; }}>
-		                                <Filter />
+		                                <Filter filterData = {this.handleFilter}/>
 		                            </div>
 							</div>
 						</div>
@@ -329,7 +346,7 @@ class magnetList extends Component {
 								                        <FontAwesomeIcon icon={faCommentAlt} className="text-info"/> <span> {listVal.admin_message}</span>
 								                    </div>
 								                </div>
-								            	<a className="leadDetail Action d-none d-md-block" 
+								            	<a className="leadDetail Action" 
 								            		data-toggle="tooltip" data-placement="bottom" title="View full lead"
 								            		onClick={()=>{this.handleModal(); this.fullLeadDetail(listVal.lead_id)}} data={listVal.lead_id} 
 							            		>

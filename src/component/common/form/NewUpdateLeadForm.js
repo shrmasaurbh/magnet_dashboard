@@ -70,7 +70,7 @@ class newUpdateLeadForm extends Component {
 	    }
 	}
 
-	addNewLead = async (e) =>{
+	updateLeadFrom = async (e) =>{
 
  		e.preventDefault();
 
@@ -145,6 +145,7 @@ class newUpdateLeadForm extends Component {
 
 	    const {sweetShow, type, title,assignedDate_from,visit_status,ethinicity,marital_status,followup_date,closed_lead_time_date} = this.state;
 	    console.log("in the render", this.state);
+	    console.log("NEw Form=======_------------>", this.props.leadStatus);
 
         return (
             <Aux>

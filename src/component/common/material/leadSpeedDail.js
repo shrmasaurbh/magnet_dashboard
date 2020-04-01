@@ -16,7 +16,7 @@ const styles = theme => ({
   speedDial: {
     position: "fixed",
     top: theme.spacing(7),
-    right: theme.spacing(3)
+    right: theme.spacing(5)
   }
 });
 

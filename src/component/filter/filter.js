@@ -7,6 +7,7 @@ import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import {getAutoCompleteProject,getRegion} from "../../dataParser/getProjectData";
+import {getLeadStatusData,getLeadSourceData} from "../../dataParser/commomDataApi";
 import {getUserListData} from "../../dataParser/getListUserData";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import 'date-fns';
@@ -30,6 +31,10 @@ class Filter extends Component {
 		this.state = {
 			option: [] ,
 			userName: [] ,
+			status: [] ,
+			status_ids: '' ,
+			source_ids: [] ,
+			source: [] ,
             isLoading : false,
             assignedDate_from : null,
             assignedDate_to : null,
@@ -48,9 +53,8 @@ class Filter extends Component {
             city : '',
             closeReason : '',
             project_name : '',
-            project_id : '',
+            project_ids : [],
             lead_id : '',
-            source : '',
             region : '',
             region_id : '',
             mobile_num : '',
@@ -68,15 +72,54 @@ class Filter extends Component {
 	async componentDidMount(){
 
 		var regionData = await getRegion();
+	    console.log("getStatusData=+++++++++++++>",regionData)
 
 	    if(regionData.meta.status === 200){
 
 	        this.setState({region : regionData})
-	    }else{
+	    }else if(regionData.meta.status === 401){
+    		
+    		localStorage.clear();
+    		this.props.history.push("/login");
+    		
+    	}else{
 
 	        this.setState({region : regionData})
 	    }
 
+
+	    var getStatusData = await getLeadStatusData();
+
+	    if(getStatusData.meta.status === 200){
+
+	    	this.setState({status : getStatusData.data})
+
+	    }else if(getStatusData.meta.status === 401){
+    		
+    		localStorage.clear();
+    		this.props.history.push("/login");
+    		
+    	}else{
+
+	        this.setState({status : getStatusData})
+	    }
+
+	    var getSourceData = await getLeadSourceData();
+	    console.log("getSourceData=+++++++++++++>",getSourceData)
+
+	    if(getSourceData.meta.status === 200){
+
+	    	this.setState({source : getSourceData.data})
+
+	    }else if(getSourceData.meta.status === 401){
+    		
+    		localStorage.clear();
+    		this.props.history.push("/login");
+    		
+    	}else{
+
+	        this.setState({source : getSourceData})
+	    }
 
 	}
 
@@ -104,6 +147,7 @@ class Filter extends Component {
 	    }
 
 	}
+
 
 	handleAutoChange = async (e) =>{
 		this.setState({isLoading:true});
@@ -141,6 +185,68 @@ class Filter extends Component {
 		this.setState({[event.target.name]: event.target.value});
   	};
 
+  	applyFilter= ()=>{
+
+    	let filterData = {};
+
+		if(this.state.project_ids.length > 0){
+        	
+        	filterData["project_ids"] = this.state.project_ids;
+    	}
+    	if(this.state.status_ids.length > 0){
+        	
+        	filterData["status_ids"] = this.state.status_ids;
+    	}
+    	if(this.state.source_ids.length > 0){
+        	
+        	filterData["source_ids"] = this.state.source_ids;
+    	}
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+    	// if(){
+        	
+     //    	filterData[] =;
+    	// }
+
+
+
+    	// else if(){
+     //    filterData = {"bed_config" :this.state.bhk,"price":[{"from":this.state.from,"to":this.state.to}]};
+    		
+    	// }
+    	// this.setState({activeClear : false});
+    	// this.props.changeFilter();
+        console.log("=== state of the filter ====",filterData);
+        // this.props.filterData(filterData);  
+
+    }
+
   	resetFilter = () =>{
 
   		this.setState({
@@ -163,7 +269,7 @@ class Filter extends Component {
             city : '',
             closeReason : '',
             project_name : '',
-            project_id : '',
+            project_ids : '',
             lead_id : '',
             source : '',
             region : '',
@@ -181,7 +287,7 @@ class Filter extends Component {
 
 	render(){
 
-		const {option,client_type,userName,isLoading,region_id,region,assignedDate_from,assignedDate_to,commingDate_from,commingDate_to,closedDate_from,closedDate_to,visitDate_from,visitDate_to,hpOpDate_from,hpOpDate_to,followDate_from,followDate_to,lastUpdateDate_from,lastUpdateDate_to,city,closeReason,visit_status,hpOpStaus,magnet_lead,presale_lead} = this.state;
+		const {option,client_type,userName,source,status,isLoading,region_id,region,assignedDate_from,assignedDate_to,commingDate_from,commingDate_to,closedDate_from,closedDate_to,visitDate_from,visitDate_to,hpOpDate_from,hpOpDate_to,followDate_from,followDate_to,lastUpdateDate_from,lastUpdateDate_to,city,closeReason,visit_status,hpOpStaus,magnet_lead,presale_lead} = this.state;
 		console.log("cityXXXXXXXXXXXX",this.state)
 		// console.log("closeReasonXXXXXXXXXXXX",closeReason)
 
@@ -195,7 +301,7 @@ class Filter extends Component {
 								<div className="form-group">
 									<Autocomplete
 									  multiple	
-								      id="asynchronous-demo"
+								      id="projectData"
 								      getOptionSelected={(option, value) => option.project_name === value.project_name}
 								      getOptionLabel={option => option.project_name}
 								      options={option}
@@ -209,7 +315,7 @@ class Filter extends Component {
 								        console.log(option);
 								        var projectId = option.map((ops) => ops.project_id);
 								        this.setState({
-								        	project_id : projectId,
+								        	project_ids : projectId,
 								        })
 
 								        if (option === null) {
@@ -256,44 +362,73 @@ class Filter extends Component {
 						</div>
 						<div className="row filterRow">
 							<div className="col-lg-6 col-sm-6 col-6">
-								<div className="form-group">
-									<TextField
-							          required
-							          value={this.state.source}
-							          id="source"
-							          name="source"
-							          onChange={this.handleChange}
+								<Autocomplete
+								  multiple	
+							      id="staus-demo"
+							      getOptionSelected={(source, value) => source.source === value.source}
+							      getOptionLabel={source => source.source}
+							      options={source}
+							      loading={isLoading}
+							      renderTags={(value, getTagProps) =>
+								    value.map((source, index) => (
+								      <Chip label={source.source} {...getTagProps({ index })}/>
+								    ))
+								  }
+							      onChange={(_event, source) => {
+							        console.log(source);
+							        var projectId = source.map((ops) => ops.source_id);
+							        this.setState({
+							        	source_ids : projectId,
+							        })
+
+							        if (status === null) {
+							        	this.setState({source: []})
+							        }
+							      }}
+							      renderInput={params => (
+							        <TextField
+							          {...params}
 							          label="Source"
-							          defaultValue=""
-							          helperText=""
+							          fullWidth
+							          onChange={this.handleAutoUserChange}
+							          InputProps={{
+							            ...params.InputProps,
+							            endAdornment: (
+							              <React.Fragment>
+							                {isLoading ? (
+							                  <CircularProgress color="inherit" size={20} />
+							                ) : null}
+							                {params.InputProps.endAdornment}
+							              </React.Fragment>
+							            )
+							          }}
 							        />
-								</div>
+							      )}
+							    />
 							</div>
 							<div className="col-lg-6 col-sm-6 col-6">
-								<div className="form-group">
-									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">City</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={city}
-								          onChange={this.handleChange}
-								          inputProps={{
-								            name: 'city',
-								            id: 'city',
-								          }}
-								        >
-								          <MenuItem value="">
-								            <em>None</em>
-								          </MenuItem>
-								          <MenuItem value="mumbai">Mumbai</MenuItem>
-								          <MenuItem value="pune">Pune</MenuItem>
-								          <MenuItem value="bangalore">Bangalore</MenuItem>
-								          <MenuItem value="delhi">Delhi</MenuItem>
-								          <MenuItem value="kolkata">Kolkata</MenuItem>
-								          <MenuItem value="goa">Goa</MenuItem>
-								        </Select>
-									</FormControl>
-								</div>
+								<FormControl>
+								    <InputLabel id="demo-controlled-open-select-label">City</InputLabel>
+							        <Select
+							          labelId="demo-controlled-open-select-label"
+							          value={city}
+							          onChange={this.handleChange}
+							          inputProps={{
+							            name: 'city',
+							            id: 'city',
+							          }}
+							        >
+							          	<MenuItem value="">
+							            	<em>None</em>
+							          	</MenuItem>
+							          	<MenuItem selected="" value="Mumbai">Mumbai</MenuItem>
+										<MenuItem selected="" value="Pune">Pune</MenuItem>
+										<MenuItem value="Bangalore">Bangalore</MenuItem>
+										<MenuItem value="Delhi">Delhi</MenuItem>
+										<MenuItem value="Kolkata">Kolkata</MenuItem>
+										<MenuItem value="Goa">Goa</MenuItem>
+							        </Select>
+								</FormControl>
 							</div>
 						</div>
 						<div className="row filterRow">
@@ -340,32 +475,49 @@ class Filter extends Component {
 						</div>
 						<div className="row filterRow">
 							<div className="col-lg-6 col-sm-6 col-6">
-								<div className="form-group">
-							        <FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Status</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={client_type}
-								          onChange={this.handleChange}
-								          inputProps={{
-								            name: 'client_type',
-								            id: 'client_type',
-								          }}
-								        >
-							          	<MenuItem value="">
-							            	<em>None</em>
-							          	</MenuItem>
-							          	<MenuItem value="not update">not update</MenuItem>
-										<MenuItem value="remind me later">remind me later</MenuItem>
-										<MenuItem value="opportunity">opportunity</MenuItem>  
-										<MenuItem value="pipeline">pipeline</MenuItem>
-										<MenuItem value="gross eoi application">gross eoi application</MenuItem>
-										<MenuItem value="decision delayed">decision delayed</MenuItem>
-										<MenuItem value="Booked">Booked</MenuItem>
-										<MenuItem value="close">close</MenuItem>
-							        </Select>
-								</FormControl>
-								</div>
+								<Autocomplete
+								  multiple	
+							      id="staus-demo"
+							      getOptionSelected={(status, value) => status.status === value.status}
+							      getOptionLabel={status => status.status}
+							      options={status}
+							      loading={isLoading}
+							      renderTags={(value, getTagProps) =>
+								    value.map((status, index) => (
+								      <Chip label={status.status} {...getTagProps({ index })}/>
+								    ))
+								  }
+							      onChange={(_event, status) => {
+							        console.log(status);
+							        var projectId = status.map((ops) => ops.status_id);
+							        this.setState({
+							        	status_ids : projectId,
+							        })
+
+							        if (status === null) {
+							        	this.setState({status: []})
+							        }
+							      }}
+							      renderInput={params => (
+							        <TextField
+							          {...params}
+							          label="Status"
+							          fullWidth
+							          onChange={this.handleAutoUserChange}
+							          InputProps={{
+							            ...params.InputProps,
+							            endAdornment: (
+							              <React.Fragment>
+							                {isLoading ? (
+							                  <CircularProgress color="inherit" size={20} />
+							                ) : null}
+							                {params.InputProps.endAdornment}
+							              </React.Fragment>
+							            )
+							          }}
+							        />
+							      )}
+							    />
 							</div>
 							<div className="col-lg-6 col-sm-6 col-6">
 								<div className="form-group">
@@ -437,19 +589,49 @@ class Filter extends Component {
 						</div>
 						<div className="row filterRow">
 							<div className="col-lg-6 col-sm-6 col-6">
-								<div className="form-group">
-									<TextField
-							          required
-							          value={this.state.magnet_lead_rm}
-							          id="magnet_lead_rm"
-							          name="magnet_lead_rm"
-							          onChange={this.handleChange}
+								<Autocomplete
+								  multiple	
+							      id="asynchronous-demo"
+							      getOptionSelected={(userName, value) => userName.name === value.name}
+							      getOptionLabel={userName => userName.name}
+							      options={userName}
+							      loading={isLoading}
+							      renderTags={(value, getTagProps) =>
+								    value.map((userName, index) => (
+								      <Chip label={userName.name} {...getTagProps({ index })}/>
+								    ))
+								  }
+							      onChange={(_event, userName) => {
+							        console.log(userName);
+							        var projectId = userName.map((ops) => ops.user_id);
+							        this.setState({
+							        	magnet_lead_rm : projectId,
+							        })
+
+							        if (option === null) {
+							        	this.setState({option: []})
+							        }
+							      }}
+							      renderInput={params => (
+							        <TextField
+							          {...params}
 							          label="Magnet Lead Rm"
-							          defaultValue=""
-							         
-							          helperText=""
+							          fullWidth
+							          onChange={this.handleAutoUserChange}
+							          InputProps={{
+							            ...params.InputProps,
+							            endAdornment: (
+							              <React.Fragment>
+							                {isLoading ? (
+							                  <CircularProgress color="inherit" size={20} />
+							                ) : null}
+							                {params.InputProps.endAdornment}
+							              </React.Fragment>
+							            )
+							          }}
 							        />
-								</div>
+							      )}
+							    />
 							</div>
 							<div className="col-sm-6 col-6">	
 								<Autocomplete
@@ -480,7 +662,7 @@ class Filter extends Component {
 							          {...params}
 							          label="PreSale RM"
 							          fullWidth
-							          onChange={this.handleAutoChange}
+							          onChange={this.handleAutoUserChange}
 							          InputProps={{
 							            ...params.InputProps,
 							            endAdornment: (
@@ -595,7 +777,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="assigned_date_form"
 							          label="From"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 							          maxDate={new Date()}
 							          name="assignedDate_from"
 							          value={assignedDate_from}
@@ -612,7 +794,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="assigned_date_to"
 							          label="to"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}						          
 										name="assignedDate_to"
 							          value={assignedDate_to}
@@ -632,7 +814,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="close_date_form"
 							          label="From"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}						          
 										name="closedDate_from"
 							          value={closedDate_from}
@@ -649,7 +831,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="close_date_to"
 							          label="to"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}				          
 										name="closedDate_to"
 							          value={closedDate_to}
@@ -669,7 +851,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="comming_date_form"
 							          label="From"
-					          		  format="MM/dd/yyyy"											
+					          		  format="yyyy/MM/dd"											
 						          	  maxDate={new Date()}							          
 						          	  name="commingDate_from"
 							          value={commingDate_from}
@@ -686,7 +868,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="comming_date_to"
 							          label="to"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}					          
 										name="commingDate_to"
 							          value={commingDate_to}
@@ -706,7 +888,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="visit_date_form"
 							          label="From"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}					          
 										name="visitDate_from"
 							          value={visitDate_from}
@@ -723,7 +905,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="visit_date_to"
 							          label="to"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}			          
 										name="visitDate_to"
 							          value={visitDate_to}
@@ -743,7 +925,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="hpOp_date_form"
 							          label="From"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}				          
 										name="hpOpDate_from"
 							          value={hpOpDate_from}
@@ -760,7 +942,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="hpOp_date_to"
 							          label="to"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}			          
 										name="hpOpDate_to"
 							          value={hpOpDate_to}
@@ -780,7 +962,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="follow_date_form"
 							          label="From"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}						          
 										name="followDate_from"
 							          value={followDate_from}
@@ -797,7 +979,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="follow_date_to"
 							          label="to"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 										maxDate={new Date()}				          
 										name="followDate_to"
 							          value={followDate_to}
@@ -817,7 +999,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="lastUpdate_date_form"
 							          label="From"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 							          maxDate={new Date()}
 							          name="lastUpdateDate_from"
 							          value={lastUpdateDate_from}
@@ -834,7 +1016,7 @@ class Filter extends Component {
 							          margin="normal"
 							          id="lastUpdate_date_to"
 							          label="to"
-							          format="MM/dd/yyyy"
+							          format="yyyy/MM/dd"
 							          maxDate={new Date()}
 							          name="lastUpdateDate_to"
 							          value={lastUpdateDate_to}
@@ -851,7 +1033,7 @@ class Filter extends Component {
 						<div className="row">
 							<div className="col-sm-6 text-right col-6">
 								<div className="form-group">
-									<button type="submit" className="btn btn-success" onClick={this.getfilterData}>Apply</button>
+									<button type="submit" className="btn btn-success" onClick={this.applyFilter}>Apply</button>
 								</div>
 							</div>
 							<div className="col-sm-6 col-6">	

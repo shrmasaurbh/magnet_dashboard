@@ -16,20 +16,29 @@ class DetailLead extends Component {
       		showLoader : false,
       		commentState : '',
       		commentStuts : false,
+      		pageId : ''
     	};
   	}
+
+  	componentDidMount() {    
+	    document.body.style.overflow = 'hidden';
+	}
+
+	componentWillUnmount() {
+	    document.body.style.overflow = 'unset';
+	}
 
 	commentsData = async (id)=>{
 
       	this.setState({showLoader : true});
-		var commentRes = {};
-		var commentReq = {};
+		let commentRes = {};
+		let commentReq = {};
 		let leadId = id;
 		console.log("YYYYYYYYYYYYYYY=====>",leadId);
 
-        var listData = {};
+        let listData = {};
         listData.size = 4;
-        listData.pageId = 1;
+        listData.pageId = 0;
         listData.filters = [];
 
         commentReq.id = leadId;
@@ -43,7 +52,8 @@ class DetailLead extends Component {
 			this.setState({
 	        	commentState :commentRes,
 	        	showLoader : false,
-	 			commentStuts : true
+	 			commentStuts : true,
+	 			pageId : commentRes.meta.pageId 
 	        })
 		}else if(commentRes.meta.status === 401){
     		
@@ -60,9 +70,48 @@ class DetailLead extends Component {
 		}
 	}
 
-	componentWillUnmount() {
-	   alert("do you want to exit?");
+	showMoreCommentsData = async (id)=>{
+
+      	this.setState({showLoader : true});
+		let showMoreCommentRes = {};
+		let showMoreCommentReq = {};
+		let leadId = id;
+		console.log("YYYYYYYYYYYYYYY=====>",leadId);
+
+        let listData = {};
+        listData.size = 4;
+        listData.pageId = this.state.pageId+1;
+        listData.filters = [];
+
+        showMoreCommentReq.id = leadId;
+        showMoreCommentReq.data = listData;
+
+		showMoreCommentRes = await getCommentData(showMoreCommentReq);
+
+		console.log("XXXXXXXXXXXXXXXXXXXX=====>",showMoreCommentRes);
+		if(showMoreCommentRes.meta.status === 200){
+
+			this.setState({
+	        	commentState :showMoreCommentRes,
+	        	showLoader : false,
+	 			commentStuts : true,
+	 			pageId : showMoreCommentRes.meta.pageId 
+	        })
+		}else if(showMoreCommentRes.meta.status === 401){
+    		
+    		localStorage.clear();
+    		this.props.history.push("/login");
+    		
+    	}
+		else{
+
+			this.setState({
+	        	commentState :showMoreCommentRes,
+	        	showLoader : false
+	        })
+		}
 	}
+
 
     render() {
 
@@ -439,37 +488,46 @@ class DetailLead extends Component {
 		                    </div>
 			      		</div>
 
-			      		<div className="row">
+			      		<div className="row mb-2">
 			      			<div className="col-md-12 commnets" onClick={()=>this.commentsData(leadDetailData.lead_id)}>
-			      				<span className="mr-3">Comments(4)</span>
+			      				<span className="mr-3">Comments({leadDetailData.comment_count})</span>
 		      				</div>
 			      		</div>
 			      		{commentStuts === true ? 
 			      			(commentStateMeta.status === 200 ? 
 					      		<PerfectScrollbar>
 					      			<div className="commentBox"> 
-							      		<div className="card shadow pt-2 pb-2 mb-2">
-							      			<div className="Comment_row d-flex mb-2">
-							      				<div className="col-md-6">
-							      					<span className="font-small"><b>Name : </b></span>
-							      					<span className="font-small">Suarbh Sharma</span>
-							      				</div>
-							      				<div className="col-md-6">
-							      					<span className="font-small"><b>Date : </b></span>
-							      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-							      				</div>
-							      			</div>
-							      			<div className="d-flex">
-							      				<div className="col-md-12">
-							      					<span className="font-small"><b>Comment : </b></span>
-							      					<span className="font-small">contact imidiate to the client, give the lead type, update the client type</span>
-							      				</div>
-							      			</div>
-							      		</div>
-
-							      		<div className="col-md-12 commnets" data="421038" ref={(ref) => this.div = ref}>
-						      				<span className="mr-3">show more</span>
-					      				</div>
+					      				{commentStateData.map((comment,index) =>
+								      		<div className="card shadow pt-2 pb-2 mb-2" key={index}>
+								      			<div className="Comment_row mb-2">
+								      				<div className="col-md-4 col-12">
+								      					<span className="font-small"><b>User ID : </b></span>
+								      					<span className="font-small">{comment.user_id}</span>
+								      				</div>
+								      				<div className="col-md-4 col-12">
+								      					<span className="font-small"><b>Lead ID : </b></span>
+								      					<span className="font-small">{comment.lead_id}</span>
+								      				</div>
+								      				<div className="col-md-4 col-12">
+								      					<span className="font-small"><b>Date : </b></span>
+								      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
+								      				</div>
+								      			</div>
+								      			<div className="d-flex">
+								      				<div className="col-md-12">
+								      					<span className="font-small"><b>Comment : </b></span>
+								      					<span className="font-small">{comment.comment}</span>
+								      				</div>
+								      			</div>
+								      		</div>
+				      					)}
+				      					{commentStateMeta.total_page !== commentStateMeta.pageId ?  
+								      		<div className="col-md-12 commnets" onClick={()=> this.showMoreCommentsData(leadDetailData.lead_id)}>
+							      				<span className="mr-3">show more</span>
+						      				</div>
+						      				:
+						      				''
+					      				}
 						      		</div>
 					      		</PerfectScrollbar>
 					      		:

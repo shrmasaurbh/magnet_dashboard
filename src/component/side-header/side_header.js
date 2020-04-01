@@ -157,32 +157,6 @@ class SideBar extends Component {
                                         </ul>
                                     }    
                                 </li>
-                                <li className="nav-item has-treeview">
-                                    <a className="nav-link text-white" onClick={()=>this.setState({visibility : !this.state.visibility})}>
-                                        <FontAwesomeIcon icon={faTasks} className="nav-icon" />
-                                        <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
-                                            	Project
-                                            <FontAwesomeIcon icon={this.state.visibility ? faAngleDown : faAngleLeft} className="right leftAngleIcon" />
-                                        </p>
-                                    </a>
-                                    {this.props.sideBar ? ''
-                                        :
-                                        <ul className={"nav nav-treeview"+" "+ (this.state.visibility ? 'show' : 'hide')}>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/top-nav.html" className="nav-link">
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>All Project</p>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a href="pages/layout/top-nav-sidebar.html" className="nav-link">
-                                                    <FontAwesomeIcon icon={faCircle} className="text-white nav-icon" />
-                                                    <p>Project Details</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    }                                        
-                                </li>
                                 <li className="nav-item">
                                     <Link to="/projects" className="nav-link text-white">
                                         <FontAwesomeIcon icon={faBuilding} className="nav-icon text-white" />

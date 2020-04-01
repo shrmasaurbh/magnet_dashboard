@@ -161,9 +161,19 @@
 .filterHeader{
     cursor: pointer;
     color: rgba(0,0,0,.5);
+    float: right;
 }
 .filterRow{
     margin-left: 0px!important;
+}
+
+.filter svg{
+    font-size: 20px;
+}
+
+.listContainer .MuiFab-root{
+    width : 48px!important ;
+    height: 48px!important ;
 }
 
 @media(max-width:767px){
@@ -177,6 +187,9 @@
 
     .MainList .ShortContent{
         padding: 0px;
+    }
+    .leadDetail{
+        top: 5em;
     }
 }
 

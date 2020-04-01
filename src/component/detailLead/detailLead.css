@@ -21,3 +21,9 @@
 .commentBox{
 	max-height: 320px;
 }
+
+@media(max-width:767px){
+    .detailLead{
+       max-height: none;
+    }
+}    
