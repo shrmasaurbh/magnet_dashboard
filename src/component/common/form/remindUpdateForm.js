@@ -24,6 +24,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import {getUpdateLeadData} from "../../../dataParser/getListData";
+
 
 const validateName = RegExp(/^[a-zA-Z ]+$/);
 const validateNumber = RegExp(/^(\d{6}|\d{7})$/);
@@ -34,6 +36,8 @@ class remindUpdateForm extends Component {
     	super(props);
 		this.state = {
 			project_addedby: '',
+			lead_status_id : '',
+			leadId : '',
             assignedDate_from :null,
             followup_date :null,
             visit_status :'',
@@ -57,15 +61,27 @@ class remindUpdateForm extends Component {
 	        var addedBy = '';
 	        this.setState({project_addedby : addedBy})
 	    }
+
+	    console.log("NEw Form=======_------------>", this.props.leadStatus);
+	    console.log("NEw Form=======_------------>", this.props.leadID);
+	    let leadStatus = this.props.leadStatus;
+	    let leadId = this.props.leadID;
+	    this.setState({
+	    	lead_status_id : leadStatus,
+	    	leadId : leadId 
+	    })
 	}
 
 
 	updateLeadFrom = async (e) =>{
 
  		e.preventDefault();
+ 		let upadateLeadReq = {};
+		let leadId = this.state.leadId;
 
-		const addLeadRequest = (({visit_status,assignedDate_from,followup_date}) => ({
+		const addLeadRequest = (({lead_status_id,visit_status,assignedDate_from,followup_date}) => ({
 			assignedDate_from,
+			lead_status_id,
 			followup_date,
 			visit_status
 	    }))(this.state);
@@ -74,36 +90,42 @@ class remindUpdateForm extends Component {
 
 	    if(addLeadRequest.visit_status != "" &&  addLeadRequest.followup_date != null){
 
-	    	// var addLeadRes = await getAddLeadData(addLeadRequest);
-		    // console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
+	    	upadateLeadReq.id = leadId;
+		    upadateLeadReq.data = addLeadRequest;
 
-		    // if(addLeadRes.meta.status === 201){
-		    	
-		    // 	console.log("Lead insert successfully !!!");
+		    if(addLeadRequest.lead_sattus != "" &&  addLeadRequest.followup_date != null){
 
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "success",	
-	     //            title : "Lead Added Successfully!!!"
+		    	var addLeadRes = await getUpdateLeadData(upadateLeadReq);
+			    console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
 
-	     //        });
+			    if(addLeadRes.meta.status === 200){
+			    	
+			    	console.log("Lead insert successfully !!!");
 
-		    // }else if(addLeadRes.meta.status === 401){
-        		
-      //   		localStorage.clear();
-      //   		this.props.history.push("/login");
-        		
-      //   	}else{
-		    	
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "error",
-	     //            title : addLeadRes.meta.message
-	     //        });
-		    // }
-	    }else{
+			    	this.setState({
+		                sweetShow:true,
+		                type : "success",	
+		                title : "Lead Updated Successfully!!!"
 
-	    }
+		            });
+
+			    }else if(addLeadRes.meta.status === 401){
+	        		
+	        		localStorage.clear();
+	        		this.props.history.push("/login");
+	        		
+	        	}else{
+			    	
+			    	this.setState({
+		                sweetShow:true,
+		                type : "error",
+		                title : addLeadRes.meta.message
+		            });
+			    }
+		    }else{
+
+		    }
+		}    
 	}
 
 	onChange = (e) => {

@@ -53,7 +53,7 @@ class PieDonutChart extends React.Component {
             {key: "Pipeline Leads", y:(homeData.pipeline), color: "#a389d4"},
             {key: "Opportunity Leads", y:(homeData.opportunity), color: "#ac6507"},
             {key: "Decision delayed Leads", y:(homeData.decision_delayed), color: "#09dc40"},
-            {key: "Assigned Leads", y:(homeData.assigned), color: "#1e954a"},
+            // {key: "Assigned Leads", y:(homeData.assigned), color: "#1e954a"},
             {key: "Gross eoi Leads", y:(homeData.gross_eoi_application), color: "#FE8A7D"},
         ];
 

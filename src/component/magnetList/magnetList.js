@@ -14,6 +14,14 @@ import SpeedDialLead from "../../component/common/material/leadSpeedDail";
 import LeadUpdateModel from "../../component/common/modal/leadUpdateMOdal";
 import Filter from "../filter/filter";
 
+// const initialState = {
+// 	    	showLoader : false,
+//       		commentState : '',
+//       		commentStuts : false,
+//       		pageId : '',
+//       		showCount : 0,
+// 	    };
+
 class magnetList extends Component {
 
 	constructor(props) {
@@ -67,7 +75,7 @@ class magnetList extends Component {
 
         // console.log("this.state.filters",this.state.filters);
     	var listData = {};
-        listData.size = 4;
+        listData.size = 8;
         listData.pageId = params[0].pageNumber || params[0].pageId || 1;
         listData.filters = params[0].filters || [];
 
@@ -76,8 +84,8 @@ class magnetList extends Component {
 
         var resData = {};
         resData = await getListData(leadDataType);
-        // console.log("========================================");
-        // console.log(resData);
+        console.log("========================================");
+        console.log(resData);
         setTimeout(()=>{
         	if(resData.meta.status == 200){
         		
@@ -109,7 +117,7 @@ class magnetList extends Component {
         })
     	var listData = {};
     	listData.filters = [];
-        listData.size = 4;
+        listData.size = 8;
         listData.pageId = pageNumber;
         listData.filters = [this.state.filters] || [];
         
@@ -144,7 +152,10 @@ class magnetList extends Component {
 	}
 
 	handleModal=(value)=>{
-        this.setState({modalShow : !this.state.modalShow});
+
+        this.setState({
+        	modalShow : !this.state.modalShow
+        });
     }
 
     handleLeadModal=(value)=>{
@@ -162,8 +173,8 @@ class magnetList extends Component {
     handleFilter = async (filterData) => {
         this.setState({showLoader : true})
         this.setState({filters : filterData})
-		// console.log("===========FilterVal==========");
-		// console.log(filterData);
+		console.log("===========FilterVal==========");
+		console.log(filterData);
         // let filters = [];
         // const procName = this.props.inputValue
     	let listData = {};
@@ -201,7 +212,7 @@ class magnetList extends Component {
 		                            	<FontAwesomeIcon icon={faFilter} className="nav-icon" />
 		                            </span>
 		                            <div className={"filterMenu" + " "+ (this.state.showFilter ? 'filterMenuShow' : '')} ref={node => { this.node = node; }}>
-		                                <Filter filterData = {this.handleFilter}/>
+		                                <Filter filterData ={this.handleFilter} changeFilter={this.handlePopUp}/>
 		                            </div>
 							</div>
 						</div>
@@ -265,7 +276,7 @@ class magnetList extends Component {
 							                        </div>
 							                    </div>
 							                </div>
-							                <a className="Action" data-toggle="tooltip" data-placement="bottom" title="View detail" onClick={(value)=>this.handleLeadModal(listVal.lead_status.status)}>
+							                <a className="Action" data-toggle="tooltip" data-placement="bottom" title="View detail" onClick={(value)=>this.handleLeadModal(listVal.lead_id)}>
 							                	<FontAwesomeIcon icon={faEdit} className="text-white"/>
 						                	</a>
         									

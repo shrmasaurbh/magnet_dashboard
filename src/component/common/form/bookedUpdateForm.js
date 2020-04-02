@@ -27,6 +27,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import {getUpdateLeadData} from "../../../dataParser/getListData";
 
 const validateName = RegExp(/^[a-zA-Z ]+$/);
 const validateNumber = RegExp(/^(\d{6}|\d{7})$/);
@@ -37,18 +38,19 @@ class bookedUpdateForm extends Component {
     	super(props);
 		this.state = {
 			project_addedby: '',
-            assignedDate_from :null,
+			lead_status_id : '',
+			leadId : '',
+            sitevisit_date :null,
             followup_date :null,
-            visit_status :'',
-            marital_status :'',
+            lead_sattus :'',
+            is_married :'',
             property_type :'',
-            looking_to_buy_in :'',
-            occupation :'',
+            opccuption :'',
             ethinicity :'',
             max_budget :'',
             min_budget :'',
-            purpose :'',
-            bed_config :'',
+            required_bhk :'',
+            locality :'',
             sweetShow:false,
             type : "success",
             title : "",
@@ -69,68 +71,84 @@ class bookedUpdateForm extends Component {
 	        var addedBy = '';
 	        this.setState({project_addedby : addedBy})
 	    }
+
+	    console.log("NEw Form=======_------------>", this.props.leadStatus);
+	    console.log("NEw Form=======_------------>", this.props.leadID);
+	    let leadStatus = this.props.leadStatus;
+	    let leadId = this.props.leadID;
+	    this.setState({
+	    	lead_status_id : leadStatus,
+	    	leadId : leadId 
+	    })
 	}
 
 	updateLeadFrom = async (e) =>{
 
  		e.preventDefault();
+ 		let upadateLeadReq = {};
+		let leadId = this.state.leadId;
 
-		const addLeadRequest = (({visit_status,marital_status,occupation,looking_to_buy_in,property_type,bed_config,purpose,max_budget,min_budget,carpet_area,special_discount,booking_amonut,flat_type,wing_number,flat_number,ethinicity,assignedDate_from,followup_date,closed_lead_time_date}) => ({
-			visit_status,
-			marital_status,
+		const addLeadRequest = (({lead_sattus,is_married,sitevisit_date,locality,opccuption,property_type,required_bhk,max_budget,min_budget,carpet_area,special_discount,booking_amount,flattype,building_number,flatno,ethinicity,assignedDate_from,followup_date,closed_lead_time_date}) => ({
+			lead_sattus,
+			is_married,
+			locality,
 			ethinicity,
-			assignedDate_from,
+			sitevisit_date,
 			followup_date,
 			closed_lead_time_date,
-			flat_type,
-			flat_number,
-			wing_number,
-			booking_amonut,
+			flattype,
+			flatno,
+			building_number,
+			booking_amount,
 			carpet_area,
 			special_discount,
 			max_budget,
 			min_budget,
-			purpose,
-			bed_config,
+			required_bhk,
 			property_type,
-			looking_to_buy_in,
-			occupation
+			opccuption
 	    }))(this.state);
 
 	    console.log("addLeadRequest XXXXXXXXXXXX",addLeadRequest)
 
-	    if(addLeadRequest.visit_status != "" &&  addLeadRequest.followup_date != null){
+	    if(addLeadRequest.lead_sattus != "" &&  addLeadRequest.followup_date != null){
 
-	    	// var addLeadRes = await getAddLeadData(addLeadRequest);
-		    // console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
+	    	upadateLeadReq.id = leadId;
+		    upadateLeadReq.data = addLeadRequest;
 
-		    // if(addLeadRes.meta.status === 201){
-		    	
-		    // 	console.log("Lead insert successfully !!!");
+		    if(addLeadRequest.lead_sattus != "" &&  addLeadRequest.followup_date != null){
 
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "success",	
-	     //            title : "Lead Added Successfully!!!"
+		    	var addLeadRes = await getUpdateLeadData(upadateLeadReq);
+			    console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
 
-	     //        });
+			    if(addLeadRes.meta.status === 200){
+			    	
+			    	console.log("Lead insert successfully !!!");
 
-		    // }else if(addLeadRes.meta.status === 401){
-        		
-      //   		localStorage.clear();
-      //   		this.props.history.push("/login");
-        		
-      //   	}else{
-		    	
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "error",
-	     //            title : addLeadRes.meta.message
-	     //        });
-		    // }
-	    }else{
+			    	this.setState({
+		                sweetShow:true,
+		                type : "success",	
+		                title : "Lead Updated Successfully!!!"
 
-	    }
+		            });
+
+			    }else if(addLeadRes.meta.status === 401){
+	        		
+	        		localStorage.clear();
+	        		this.props.history.push("/login");
+	        		
+	        	}else{
+			    	
+			    	this.setState({
+		                sweetShow:true,
+		                type : "error",
+		                title : addLeadRes.meta.message
+		            });
+			    }
+		    }else{
+
+		    }
+		}    
 	}
 
 	onChange = (e) => {
@@ -150,7 +168,7 @@ class bookedUpdateForm extends Component {
 
     render() {
 
-	    const {sweetShow, type, title,assignedDate_from,marital_status,visit_status,followup_date,bed_config,max_budget,min_budget,purpose,looking_to_buy_in,property_type,occupation,ethinicity} = this.state;
+	    const {sweetShow, type, title,sitevisit_date,is_married,lead_sattus,followup_date,required_bhk,max_budget,min_budget,property_type,opccuption,ethinicity} = this.state;
 	    console.log("in the render", this.state);
 
         return (
@@ -165,11 +183,11 @@ class bookedUpdateForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Bed Config</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={bed_config}
+								          value={required_bhk}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'bed_config',
-								            id: 'bed_config',
+								            name: 'required_bhk',
+								            id: 'required_bhk',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -188,25 +206,25 @@ class bookedUpdateForm extends Component {
 								        </Select>
 									</FormControl>
 								</div>
-								<div className="col-sm-6 mb-3">
-									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Purpose</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={purpose}
+								<div className="col-sm-6">
+									<div className="form-group">
+										<TextField
+								          required
+								          id="locality"
+								          name="locality"
 								          onChange={this.onChange}
-								          inputProps={{
-								            name: 'purpose',
-								            id: 'purpose',
-								          }}
-								        >
-								          <MenuItem value="">
-								            <em>None</em>
-								          </MenuItem>
-											<MenuItem value="self use">Self Use</MenuItem>
-											<MenuItem value="investment">Investment</MenuItem>
-								        </Select>
-									</FormControl>
+								          label="Current Locality"
+								          defaultValue=""
+								          helperText=""
+								          InputProps={{
+									          startAdornment: (
+									            <InputAdornment position="start">
+									              <GpsFixedRoundedIcon />
+									            </InputAdornment>
+									          ),
+									      }}
+								        />
+									</div>
 								</div>
 							</div>
 
@@ -305,57 +323,12 @@ class bookedUpdateForm extends Component {
 								</div>
 							</div>
 							<div className="row">
-								<div className="col-sm-6 mb-3">
-									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Looking To Buy In</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={looking_to_buy_in}
-								          onChange={this.onChange}
-								          inputProps={{
-								            name: 'looking_to_buy_in',
-								            id: 'looking_to_buy_in',
-								          }}
-								        >
-								          <MenuItem value="">
-								            <em>None</em>
-								          </MenuItem>
-								          	<MenuItem value="Immediately">Immediately</MenuItem>
-											<MenuItem value="Within next 2 months">Within next 2 months</MenuItem>
-											<MenuItem value="Within next 4 months">Within next 4 months</MenuItem>
-											<MenuItem value="Within next 6 months">Within next 6 months</MenuItem>
-											<MenuItem value="Within next 6+ months">Within next 6+ months</MenuItem>
-								        </Select>
-									</FormControl>
-								</div>
 								<div className="col-sm-6">
 									<div className="form-group">
 										<TextField
 								          required
-								          id="current_locality"
-								          name="current_locality"
-								          onChange={this.onChange}
-								          label="Current Locality"
-								          defaultValue=""
-								          helperText=""
-								          InputProps={{
-									          startAdornment: (
-									            <InputAdornment position="start">
-									              <GpsFixedRoundedIcon />
-									            </InputAdornment>
-									          ),
-									      }}
-								        />
-									</div>
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-6">
-									<div className="form-group">
-										<TextField
-								          required
-								          id="flat_type"
-								          name="flat_type"
+								          id="flattype"
+								          name="flattype"
 								          onChange={this.onChange}
 								          label="Flat type"
 								          defaultValue=""
@@ -374,8 +347,8 @@ class bookedUpdateForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="flat_number"
-								          name="flat_number"
+								          id="flatno"
+								          name="flatno"
 								          onChange={this.onChange}
 								          label="Flat Number"
 								          defaultValue=""
@@ -396,8 +369,8 @@ class bookedUpdateForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="wing_number"
-								          name="wing_number"
+								          id="building_number"
+								          name="building_number"
 								          onChange={this.onChange}
 								          label="Wing Number"
 								          defaultValue=""
@@ -416,8 +389,8 @@ class bookedUpdateForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="booking_amonut"
-								          name="booking_amonut"
+								          id="booking_amount"
+								          name="booking_amount"
 								          onChange={this.onChange}
 								          label="Booking Amonut"
 								          defaultValue=""
@@ -459,11 +432,11 @@ class bookedUpdateForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Marital Status</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={marital_status}
+								          value={is_married}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'marital_status',
-								            id: 'marital_status',
+								            name: 'is_married',
+								            id: 'is_married',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -478,14 +451,14 @@ class bookedUpdateForm extends Component {
 							<div className="row mb-2">
 								<div className="col-sm-6">
 									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Occupation</InputLabel>
+									    <InputLabel id="demo-controlled-open-select-label">opccuption</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={occupation}
+								          value={opccuption}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'occupation',
-								            id: 'occupation',
+								            name: 'opccuption',
+								            id: 'opccuption',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -578,11 +551,11 @@ class bookedUpdateForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Site Visit status</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={visit_status}
+								          value={lead_sattus}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'visit_status',
-								            id: 'visit_status',
+								            name: 'lead_sattus',
+								            id: 'lead_sattus',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -608,9 +581,9 @@ class bookedUpdateForm extends Component {
 									          label="Site Visit Date"
 									          format="MM/dd/yyyy"
 									          maxDate={new Date()}
-									          name="assignedDate_from"
-									          value={assignedDate_from}
-									          onChange={(key,date)=>this.handleDateChange('assignedDate_from',date)}
+									          name="sitevisit_date"
+									          value={sitevisit_date}
+									          onChange={(key,date)=>this.handleDateChange('sitevisit_date',date)}
 									          KeyboardButtonProps={{
 									            'aria-label': 'change date',
 									          }}
@@ -687,7 +660,7 @@ class bookedUpdateForm extends Component {
 							<div className="row">
 								<div className="col-md-12 col-sm-12 text-center col-12">
 									<div className="form-group">
-										<button type="submit" className="btn btn-success" onClick={this.updateProjectForm}>Submit</button>
+										<button type="submit" className="btn btn-success" onClick={this.updateLeadFrom}>Submit</button>
 									</div>
 								</div>
 							</div>	

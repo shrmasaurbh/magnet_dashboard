@@ -15,7 +15,7 @@ import LeadModel from "../../common/modal/leadModal.js";
 const styles = theme => ({
   speedDial: {
     position: "fixed",
-    top: theme.spacing(7),
+    top: theme.spacing(6.4),
     right: theme.spacing(5)
   }
 });
@@ -90,12 +90,6 @@ class SpeedDialLead extends React.Component {
               icon=<AddIcon />
               tooltipTitle="Add Lead"
               onClick={this.handleModal}
-            />
-            <SpeedDialAction
-              key="Edit"
-              icon=<EditIcon />
-              tooltipTitle="Update Lead"
-              onClick={this.updateHandleModal}
             />
             <SpeedDialAction
               key="Assigned"

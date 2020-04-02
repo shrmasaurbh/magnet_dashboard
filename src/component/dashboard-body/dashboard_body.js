@@ -104,7 +104,7 @@ class DashboardBody extends Component {
 							<div className="col-lg-3 col-6">
 								<div className="small-box bg-warning">
 									{showLoader ? 
-										(<CircularProgress color="warning" size={30} />
+										(<CircularProgress color="inherit" size={30} />
 										): null
 									}
 									<div className="inner">
@@ -122,7 +122,7 @@ class DashboardBody extends Component {
 							<div className="col-lg-3 col-6">
 								<div className="small-box bg-danger">
 									{showLoader ? 
-										(<CircularProgress color="danger" size={30} />
+										(<CircularProgress color="inherit" size={30} />
 										): null
 									}
 									<div className="inner">
@@ -140,7 +140,6 @@ class DashboardBody extends Component {
 						</div>  
                 	</div>
                 	<div className="container-fluid">
-						<BootstrapTable />
 						<div className="row">
 							<div className="col-md-12 col-12">
 								<div className="card">

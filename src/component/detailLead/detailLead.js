@@ -16,17 +16,38 @@ class DetailLead extends Component {
       		showLoader : false,
       		commentState : '',
       		commentStuts : false,
-      		pageId : ''
+      		pageId : '',
+      		showCount : 0,
     	};
   	}
 
   	componentDidMount() {    
 	    document.body.style.overflow = 'hidden';
+	    console.log(".............................>>>>>>>>>>>???????????????????")
+	    this.setState({
+	    	showLoader : false,
+      		commentState : '',
+      		commentStuts : false,
+      		pageId : '',
+      		showCount : 0,
+	    });
 	}
 
-	componentWillUnmount() {
-	    document.body.style.overflow = 'unset';
-	}
+	// componentDidUpdate(){
+	// 	console.log(".............................>>>>>>>>>>>???????????????????")
+	//     this.setState({
+	//     	showLoader : false,
+ //      		commentState : '',
+ //      		commentStuts : false,
+ //      		pageId : '',
+ //      		showCount : 0,
+	//     });	
+	// }
+
+	// componentWillUnmount() {
+	//     document.body.style.overflow = 'unset';
+	//     alert("are sure leaving")
+	// }
 
 	commentsData = async (id)=>{
 
@@ -53,7 +74,8 @@ class DetailLead extends Component {
 	        	commentState :commentRes,
 	        	showLoader : false,
 	 			commentStuts : true,
-	 			pageId : commentRes.meta.pageId 
+	 			pageId : commentRes.meta.pageId,
+	 			showCount : commentRes.meta.size, 
 	        })
 		}else if(commentRes.meta.status === 401){
     		
@@ -95,7 +117,8 @@ class DetailLead extends Component {
 	        	commentState :showMoreCommentRes,
 	        	showLoader : false,
 	 			commentStuts : true,
-	 			pageId : showMoreCommentRes.meta.pageId 
+	 			pageId : showMoreCommentRes.meta.pageId, 
+	 			showCount : showMoreCommentRes.meta.size + this.state.showCount, 
 	        })
 		}else if(showMoreCommentRes.meta.status === 401){
     		
@@ -119,8 +142,9 @@ class DetailLead extends Component {
     	let leadDetailMeta = leadDetail.meta;
     	let leadDetailData = leadDetail.data;
 
-    	const {commentState,commentStuts} = this.state;
+    	const {commentState,commentStuts,showCount} = this.state;
     	console.log("wwwwwwwwwwwwwwwwwwwwwww",leadDetailMeta.status);
+    	console.log("==============-------------->>>>>",showCount);
     	let commentStateMeta = commentState.meta;
     	let commentStateData = commentState.data;
 		// {commentStateMeta.status == 200 ? 
@@ -499,19 +523,25 @@ class DetailLead extends Component {
 					      			<div className="commentBox"> 
 					      				{commentStateData.map((comment,index) =>
 								      		<div className="card shadow pt-2 pb-2 mb-2" key={index}>
-								      			<div className="Comment_row mb-2">
-								      				<div className="col-md-4 col-12">
-								      					<span className="font-small"><b>User ID : </b></span>
-								      					<span className="font-small">{comment.user_id}</span>
-								      				</div>
-								      				<div className="col-md-4 col-12">
-								      					<span className="font-small"><b>Lead ID : </b></span>
-								      					<span className="font-small">{comment.lead_id}</span>
-								      				</div>
-								      				<div className="col-md-4 col-12">
-								      					<span className="font-small"><b>Date : </b></span>
-								      					<span className="font-small">Thu,Feb 27,2020 6:44 PM</span>
-								      				</div>
+								      			<div className="container">
+									      			<div className="Comment_row row mb-2">
+									      				<div className="col-md-2 col-12">
+									      					<span className="font-small"><b>User : </b></span>
+									      					<span className="font-small">{comment.user}</span>
+									      				</div>
+									      				<div className="col-md-2 col-12">
+									      					<span className="font-small"><b>Lead ID : </b></span>
+									      					<span className="font-small">{comment.lead_id}</span>
+									      				</div>
+									      				<div className="col-md-4 col-12">
+									      					<span className="font-small"><b>Created Date : </b></span>
+									      					<span className="font-small">{comment.createdAt}</span>
+									      				</div>
+									      				<div className="col-md-4 col-12">
+									      					<span className="font-small"><b>Updated Date : </b></span>
+									      					<span className="font-small">{comment.updatedAt}</span>
+									      				</div>
+									      			</div>
 								      			</div>
 								      			<div className="d-flex">
 								      				<div className="col-md-12">
@@ -521,7 +551,7 @@ class DetailLead extends Component {
 								      			</div>
 								      		</div>
 				      					)}
-				      					{commentStateMeta.total_page !== commentStateMeta.pageId ?  
+				      					{commentStateMeta.count != showCount ?  
 								      		<div className="col-md-12 commnets" onClick={()=> this.showMoreCommentsData(leadDetailData.lead_id)}>
 							      				<span className="mr-3">show more</span>
 						      				</div>

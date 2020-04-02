@@ -24,6 +24,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import {getUpdateLeadData} from "../../../dataParser/getListData";
+
 
 const validateName = RegExp(/^[a-zA-Z ]+$/);
 const validateNumber = RegExp(/^(\d{6}|\d{7})$/);
@@ -34,14 +36,15 @@ class eoiUpdateForm extends Component {
     	super(props);
 		this.state = {
 			project_addedby: '',
-            assignedDate_from :null,
+			lead_status_id : '',
+			leadId : '',
+            sitevisit_date :null,
             followup_date :null,
             booking_date :null,
-            visit_status :'',
+            lead_sattus :'',
             property_type :'',
-            area_interested :'',
+            interested_area :'',
             current_locality :'',
-            looking_to_buy_in :'',
             sweetShow:false,
             type : "success",
             title : "",
@@ -62,57 +65,74 @@ class eoiUpdateForm extends Component {
 	        var addedBy = '';
 	        this.setState({project_addedby : addedBy})
 	    }
+
+	    console.log("NEw Form=======_------------>", this.props.leadStatus);
+	    console.log("NEw Form=======_------------>", this.props.leadID);
+	    let leadStatus = this.props.leadStatus;
+	    let leadId = this.props.leadID;
+	    this.setState({
+	    	lead_status_id : leadStatus,
+	    	leadId : leadId 
+	    })
 	}
 
 	updateLeadFrom = async (e) =>{
 
  		e.preventDefault();
+ 		let upadateLeadReq = {};
+		let leadId = this.state.leadId;
 
-		const addLeadRequest = (({visit_status,assignedDate_from,current_locality,area_interested,followup_date,booking_date,property_type,looking_to_buy_in}) => ({
-			assignedDate_from,
+		const addLeadRequest = (({lead_status_id,lead_sattus,sitevisit_date,current_locality,interested_area,followup_date,booking_date,property_type}) => ({
+			sitevisit_date,
 			followup_date,
-			visit_status,
+			lead_sattus,
+			lead_status_id,
 			booking_date,
 			property_type,
-			looking_to_buy_in,
-			area_interested,
+			interested_area,
 			current_locality
 	    }))(this.state);
 
 	    console.log("addLeadRequest XXXXXXXXXXXX",addLeadRequest)
 
-	    if(addLeadRequest.visit_status != "" &&  addLeadRequest.followup_date != null){
+	    if(addLeadRequest.lead_sattus != "" &&  addLeadRequest.followup_date != null){
 
-	    	// var addLeadRes = await getAddLeadData(addLeadRequest);
-		    // console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
+	    	upadateLeadReq.id = leadId;
+		    upadateLeadReq.data = addLeadRequest;
 
-		    // if(addLeadRes.meta.status === 201){
-		    	
-		    // 	console.log("Lead insert successfully !!!");
+		    if(addLeadRequest.lead_sattus != "" &&  addLeadRequest.followup_date != null){
 
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "success",	
-	     //            title : "Lead Added Successfully!!!"
+		    	var addLeadRes = await getUpdateLeadData(upadateLeadReq);
+			    console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
 
-	     //        });
+			    if(addLeadRes.meta.status === 200){
+			    	
+			    	console.log("Lead insert successfully !!!");
 
-		    // }else if(addLeadRes.meta.status === 401){
-        		
-      //   		localStorage.clear();
-      //   		this.props.history.push("/login");
-        		
-      //   	}else{
-		    	
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "error",
-	     //            title : addLeadRes.meta.message
-	     //        });
-		    // }
-	    }else{
+			    	this.setState({
+		                sweetShow:true,
+		                type : "success",	
+		                title : "Lead Updated Successfully!!!"
 
-	    }
+		            });
+
+			    }else if(addLeadRes.meta.status === 401){
+	        		
+	        		localStorage.clear();
+	        		this.props.history.push("/login");
+	        		
+	        	}else{
+			    	
+			    	this.setState({
+		                sweetShow:true,
+		                type : "error",
+		                title : addLeadRes.meta.message
+		            });
+			    }
+		    }else{
+
+		    }
+		}    
 	}
 
 	onChange = (e) => {
@@ -132,7 +152,7 @@ class eoiUpdateForm extends Component {
 
     render() {
 
-	    const {sweetShow, type, title,assignedDate_from,visit_status,followup_date,looking_to_buy_in,property_type,booking_date} = this.state;
+	    const {sweetShow, type, title,sitevisit_date,lead_sattus,followup_date,property_type,booking_date} = this.state;
 	    console.log("in the render", this.state);
 
         return (
@@ -146,8 +166,8 @@ class eoiUpdateForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="area_interested"
-								          name="area_interested"
+								          id="interested_area"
+								          name="interested_area"
 								          onChange={this.onChange}
 								          label="Area Interested"
 								          defaultValue=""
@@ -161,29 +181,6 @@ class eoiUpdateForm extends Component {
 									      }}
 								        />
 									</div>
-								</div>
-								<div className="col-sm-6">
-									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Looking To Buy In</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={looking_to_buy_in}
-								          onChange={this.onChange}
-								          inputProps={{
-								            name: 'looking_to_buy_in',
-								            id: 'looking_to_buy_in',
-								          }}
-								        >
-								          <MenuItem value="">
-								            <em>None</em>
-								          </MenuItem>
-								          	<MenuItem value="Immediately">Immediately</MenuItem>
-											<MenuItem value="Within next 2 months">Within next 2 months</MenuItem>
-											<MenuItem value="Within next 4 months">Within next 4 months</MenuItem>
-											<MenuItem value="Within next 6 months">Within next 6 months</MenuItem>
-											<MenuItem value="Within next 6+ months">Within next 6+ months</MenuItem>
-								        </Select>
-									</FormControl>
 								</div>
 							</div>
 							<div className="row">
@@ -236,11 +233,11 @@ class eoiUpdateForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Site Visit status</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={visit_status}
+								          value={lead_sattus}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'visit_status',
-								            id: 'visit_status',
+								            name: 'lead_sattus',
+								            id: 'lead_sattus',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -266,9 +263,9 @@ class eoiUpdateForm extends Component {
 									          label="Site Visit Date"
 									          format="MM/dd/yyyy"
 									          maxDate={new Date()}
-									          name="assignedDate_from"
-									          value={assignedDate_from}
-									          onChange={(key,date)=>this.handleDateChange('assignedDate_from',date)}
+									          name="sitevisit_date"
+									          value={sitevisit_date}
+									          onChange={(key,date)=>this.handleDateChange('sitevisit_date',date)}
 									          KeyboardButtonProps={{
 									            'aria-label': 'change date',
 									          }}

@@ -25,6 +25,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import {getUpdateLeadData} from "../../../dataParser/getListData";
+
 
 const validateName = RegExp(/^[a-zA-Z ]+$/);
 const validateNumber = RegExp(/^(\d{6}|\d{7})$/);
@@ -35,18 +37,17 @@ class cancelUpdateForm extends Component {
     	super(props);
 		this.state = {
 			project_addedby: '',
-            assignedDate_from :null,
-            followup_date :null,
-            closed_lead_time_date :null,
-            visit_status :'',
-            looking_to_buy_in :'',
-            occupation :'',
+			lead_status_id : '',
+			leadId : '',
+            sitevisit_date :null,
+            closed_date :null,
+            lead_sattus  :'',
+            opccuption :'',
             ethinicity :'',
             max_budget :'',
             min_budget :'',
-            purpose :'',
-            cancel_reason :'',
-            bed_config :'',
+            cancellation_reason :'',
+            required_bhk :'',
             sweetShow:false,
             type : "success",
             title : "",
@@ -67,6 +68,76 @@ class cancelUpdateForm extends Component {
 	        var addedBy = '';
 	        this.setState({project_addedby : addedBy})
 	    }
+
+	    console.log("NEw Form=======_------------>", this.props.leadStatus);
+	    console.log("NEw Form=======_------------>", this.props.leadID);
+	    let leadStatus = this.props.leadStatus;
+	    let leadId = this.props.leadID;
+	    this.setState({
+	    	lead_status_id : leadStatus,
+	    	leadId : leadId 
+	    })
+	}
+
+	updateLeadFrom = async (e) =>{
+
+ 		e.preventDefault();
+ 		let upadateLeadReq = {};
+		let leadId = this.state.leadId;
+
+		const addLeadRequest = (({lead_status_id,cancellation_reason,lead_sattus ,marital_status,current_locality,opccuption,property_type,required_bhk,max_budget,min_budget,carpet_area,special_discount,booking_amonut,flat_type,wing_number,flat_number,ethinicity,sitevisit_date,closed_date}) => ({
+			lead_sattus ,
+			sitevisit_date,
+			lead_status_id,
+			closed_date,
+			ethinicity,
+			required_bhk,
+			max_budget,
+			min_budget,
+			cancellation_reason,
+			opccuption
+	    }))(this.state);
+
+	    console.log("addLeadRequest XXXXXXXXXXXX",addLeadRequest)
+
+	    if(addLeadRequest.lead_sattus  != "" &&  addLeadRequest != null){
+
+	    	upadateLeadReq.id = leadId;
+		    upadateLeadReq.data = addLeadRequest;
+
+		    if(addLeadRequest.lead_sattus != "" &&  addLeadRequest.followup_date != null){
+
+		    	var addLeadRes = await getUpdateLeadData(upadateLeadReq);
+			    console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
+
+			    if(addLeadRes.meta.status === 200){
+			    	
+			    	console.log("Lead insert successfully !!!");
+
+			    	this.setState({
+		                sweetShow:true,
+		                type : "success",	
+		                title : "Lead Updated Successfully!!!"
+
+		            });
+
+			    }else if(addLeadRes.meta.status === 401){
+	        		
+	        		localStorage.clear();
+	        		this.props.history.push("/login");
+	        		
+	        	}else{
+			    	
+			    	this.setState({
+		                sweetShow:true,
+		                type : "error",
+		                title : addLeadRes.meta.message
+		            });
+			    }
+		    }else{
+
+		    }	
+		}    
 	}
 
 	onChange = (e) => {
@@ -86,7 +157,7 @@ class cancelUpdateForm extends Component {
 
     render() {
 
-	    const {sweetShow, type, title,assignedDate_from,visit_status,followup_date,bed_config,max_budget,min_budget,purpose,looking_to_buy_in,occupation,closed_lead_time_date,ethinicity} = this.state;
+	    const {sweetShow, type, title,sitevisit_date,lead_sattus ,required_bhk,max_budget,min_budget,opccuption,closed_date,ethinicity} = this.state;
 	    console.log("in the render", this.state);
 
         return (
@@ -101,11 +172,11 @@ class cancelUpdateForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Bed Config</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={bed_config}
+								          value={required_bhk}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'bed_config',
-								            id: 'bed_config',
+								            name: 'required_bhk',
+								            id: 'required_bhk',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -121,26 +192,6 @@ class cancelUpdateForm extends Component {
 											<MenuItem value="8 bhk">8 BHK</MenuItem>
 											<MenuItem value="9 bhk">9 BHK</MenuItem>
 											<MenuItem value="10 bhk">10 BHK</MenuItem>
-								        </Select>
-									</FormControl>
-								</div>
-								<div className="col-sm-6 mb-3">
-									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Purpose</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={purpose}
-								          onChange={this.onChange}
-								          inputProps={{
-								            name: 'purpose',
-								            id: 'purpose',
-								          }}
-								        >
-								          <MenuItem value="">
-								            <em>None</em>
-								          </MenuItem>
-											<MenuItem value="self use">Self Use</MenuItem>
-											<MenuItem value="investment">Investment</MenuItem>
 								        </Select>
 									</FormControl>
 								</div>
@@ -242,37 +293,14 @@ class cancelUpdateForm extends Component {
 							</div>
 							<div className="row">
 								<div className="col-sm-6">
-									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Looking To Buy In</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={looking_to_buy_in}
-								          onChange={this.onChange}
-								          inputProps={{
-								            name: 'looking_to_buy_in',
-								            id: 'looking_to_buy_in',
-								          }}
-								        >
-								          <MenuItem value="">
-								            <em>None</em>
-								          </MenuItem>
-								          	<MenuItem value="Immediately">Immediately</MenuItem>
-											<MenuItem value="Within next 2 months">Within next 2 months</MenuItem>
-											<MenuItem value="Within next 4 months">Within next 4 months</MenuItem>
-											<MenuItem value="Within next 6 months">Within next 6 months</MenuItem>
-											<MenuItem value="Within next 6+ months">Within next 6+ months</MenuItem>
-								        </Select>
-									</FormControl>
-								</div>
-								<div className="col-sm-6">
 									<div className="form-group">
 										<TextField
 								        	id="standard-multiline-flexible"
 								          	label="Cancel Reason"
-								          	name="cancel_reason"
+								          	name="cancellation_reason"
 								          	multiline
 								          	rowsMax="4"
-								          	value={this.state.cancel_reason}
+								          	value={this.state.cancellation_reason}
 								          	onChange={this.onChange}
 								        />
 									</div>
@@ -281,14 +309,14 @@ class cancelUpdateForm extends Component {
 							<div className="row">
 								<div className="col-sm-6">
 									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Occupation</InputLabel>
+									    <InputLabel id="demo-controlled-open-select-label">Occuption</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={occupation}
+								          value={opccuption}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'occupation',
-								            id: 'occupation',
+								            name: 'opccuption',
+								            id: 'opccuption',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -381,11 +409,11 @@ class cancelUpdateForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Site Visit status</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={visit_status}
+								          value={lead_sattus}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'visit_status',
-								            id: 'visit_status',
+								            name: 'lead_sattus',
+								            id: 'lead_sattus',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -411,9 +439,9 @@ class cancelUpdateForm extends Component {
 									          label="Site Visit Date"
 									          format="MM/dd/yyyy"
 									          maxDate={new Date()}
-									          name="assignedDate_from"
-									          value={assignedDate_from}
-									          onChange={(key,date)=>this.handleDateChange('assignedDate_from',date)}
+									          name="sitevisit_date"
+									          value={sitevisit_date}
+									          onChange={(key,date)=>this.handleDateChange('sitevisit_date',date)}
 									          KeyboardButtonProps={{
 									            'aria-label': 'change date',
 									          }}
@@ -428,32 +456,13 @@ class cancelUpdateForm extends Component {
 										<MuiPickersUtilsProvider utils={DateFnsUtils}>
 											<KeyboardDatePicker
 									          margin="normal"
-									          id=""
-									          label="Follow Up Date"
-									          format="MM/dd/yyyy"
-									          maxDate={new Date()}
-									          name="followup_date"
-									          value={followup_date}
-									          onChange={(key,date)=>this.handleDateChange('followup_date',date)}
-									          KeyboardButtonProps={{
-									            'aria-label': 'change date',
-									          }}
-									        />
-								    	</MuiPickersUtilsProvider> 
-									</FormControl>
-								</div>
-								<div className="col-sm-6">
-									<FormControl>
-										<MuiPickersUtilsProvider utils={DateFnsUtils}>
-											<KeyboardDatePicker
-									          margin="normal"
-									          id="closed_lead_time_date"
+									          id="closed_date"
 									          label="Closed Lead Time Date"
 									          format="MM/dd/yyyy"
 									          maxDate={new Date()}
-									          name="closed_lead_time_date"
-									          value={closed_lead_time_date}
-									          onChange={(key,date)=>this.handleDateChange('closed_lead_time_date',date)}
+									          name="closed_date"
+									          value={closed_date}
+									          onChange={(key,date)=>this.handleDateChange('closed_date',date)}
 									          KeyboardButtonProps={{
 									            'aria-label': 'change date',
 									          }}

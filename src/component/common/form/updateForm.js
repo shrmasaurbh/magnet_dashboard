@@ -85,7 +85,11 @@ class updateForm extends Component {
 		    	console.log("YeSSSSSSSSSSSSSSSSS");
 		    	let autoFill = this.props.formData.data;
 		    	console.log("XXXXXXXXXXXXXXXXXXXXXXX",autoFill);
-		    	console.log("XXXXXXXXXXXXXXXXXXXXXXX",autoFill.location);
+		    	console.log("XXXXXXXXXXXXXXXXXXXXXXX",autoFill.region);
+
+		    	if(autoFill.region === null || autoFill.region === undefined){
+		    		autoFill.region = {"region_id":""};
+		    	}
 
 		    	this.setState({
 		    		project_name : autoFill.project_name, 

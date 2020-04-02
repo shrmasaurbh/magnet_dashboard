@@ -33,7 +33,7 @@ class list extends Component {
         // this.setState({listTitle : leadType});
 
         var listData = {};
-        listData.size = 4;
+        listData.size = 8;
         listData.pageId = 1;
         listData.filters = [];
 
@@ -88,7 +88,7 @@ class list extends Component {
 	        // this.setState({listTitle : leadType});
 
 	        var listData = {};
-	        listData.size = 4;
+	        listData.size = 8;
 	        listData.pageId = 1;
 	        listData.filters = [];
 

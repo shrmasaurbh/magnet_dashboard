@@ -47,6 +47,9 @@
 .text-sm {
     font-size: .85rem!important;
 }
+.messageHeader{
+    z-index: 2000;
+}
 
 @media only screen and (max-width: 991px){
     .navbar-badge {

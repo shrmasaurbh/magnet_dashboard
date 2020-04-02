@@ -10,7 +10,8 @@ import "./side_header.css";
 import "../../assets/css/main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faPowerOff, faBuilding, faAngleLeft, faCircle, faTachometerAlt, faPlusSquare, faTasks, faAngleDown ,faTimes} from "@fortawesome/free-solid-svg-icons";
-import {getLogout} from "../../dataParser/auth"
+import {getLogout} from "../../dataParser/auth";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 // const scrollbarStyle = {
 //     'maxHeight': '110ev'
@@ -99,7 +100,8 @@ class SideBar extends Component {
                     <div className="sidebar">
                         <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                             <div className="image">
-                            	<img className="img-circle elevation-2" src={chets} alt="user_image" />
+                            	{/*<img className="img-circle elevation-2" src={chets} alt="user_image" />*/}
+                                <AccountCircleIcon className="userIcon"/>
                             </div>
                             <div className={"info" +" "+ (this.props.sideBar ? 'hide' : 'Show')}>
                                 <span className="d-block text-capitalize userName">{userName}</span>
@@ -124,7 +126,7 @@ class SideBar extends Component {
                                         <p className= {this.props.sideBar ? 'hide' : 'inlineShow'}>
                                                 Leads
                                             <FontAwesomeIcon icon={this.state.leadShow ? faAngleDown : faAngleLeft} className="right leftAngleIcon" />
-                                            <span className="badge badge-danger right">New</span>
+                                            {/*<span className="badge badge-danger right">New</span>*/}
                                         </p>
                                     </a>
                                     {this.props.sideBar ? ''

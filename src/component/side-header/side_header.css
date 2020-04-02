@@ -57,9 +57,17 @@
     display: inline-block;
     padding-left: .8rem;
 }
-.user-panel img {
+/*.user-panel svg {
     height: auto;
     width: 2.1rem;
+    font-size: 34px;
+    color:#fff;
+}*/
+.user-panel .userIcon {
+    /*height: auto;*/
+    /*width: 2.1rem;*/
+    font-size: 34px;
+    color:#fff;
 }
 .user-panel .info {
     display: inline-block;

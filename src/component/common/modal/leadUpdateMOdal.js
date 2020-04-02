@@ -27,8 +27,15 @@ class LeadModal extends Component {
 
 	async componentDidMount(){
 
+		this.setState({
+			status : [],
+			status_id : ''	
+		})
+
+	    console.log("lead Update *************** = +++++++++++++>",this.state)
+
 	    var getStatusData = await getLeadStatusData();
-	    console.log("getStatusData=+++++++++++++>",getStatusData)
+	    console.log("getStatusData*********************=+++++++++++++>",getStatusData)
 
 	    if(getStatusData.meta.status === 200){
 
@@ -53,7 +60,7 @@ class LeadModal extends Component {
     render() {
 
     	const FROMS_TYPES = {
-			1 : NewUpdateLeadForm,
+			1 : NewUpdateLeadForm, 
 			7 : CloseupdateForm,
 			2 : RemindUpdateForm,
 			4 : OpportunityUpdateForm,
@@ -64,7 +71,7 @@ class LeadModal extends Component {
 		}
 
 		const {status_id,status} = this.state;
-		console.log("this.props.fromType============>",this.state.status);
+		console.log("this.props.fromType============>",this.state.status_id);
 		const Form_name = FROMS_TYPES[this.state.status_id];
 
         return (
@@ -109,7 +116,7 @@ class LeadModal extends Component {
 								</FormControl>
 						</div>
 				        :
-				        <Form_name changeModal={(value)=>this.props.changeModal(this.props.fromType)} leadStatus={this.state.status_id}/>
+				        <Form_name changeModal={(value)=>this.props.changeModal(this.props.fromType)} leadStatus={this.state.status_id} leadID={this.props.fromType}/>
 				    }
 			      </Modal.Body>
 			    </Modal>

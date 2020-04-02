@@ -90,3 +90,13 @@ export const getCommentData = async (value) =>{
 	return  commentData;
 
 }
+
+export const getUpdateLeadData = async (value) =>{
+
+	console.log("valuee============>",value);
+
+	let commentData = await get('/leads/'+value.id, value.data)
+	console.log("commentData============>",commentData);
+	return  commentData;
+
+}

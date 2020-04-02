@@ -57,14 +57,14 @@ class Filter extends Component {
             lead_id : '',
             region : '',
             region_id : '',
-            mobile_num : '',
+            client_number : '',
             client_id : '',
             magnet_lead_rm : '',
             pre_sale_rm : '',
             visit_status : '',
             hpOpStaus : '',
-            magnet_lead : '',
-            presale_lead : '',
+            is_magnet : '',
+            is_presale : '',
             client_type : ''
 		};
 	}
@@ -201,49 +201,60 @@ class Filter extends Component {
         	
         	filterData["source_ids"] = this.state.source_ids;
     	}
-    	// if(){
+    	if(this.state.lead_id){
         	
-     //    	filterData[] =;
-    	// }
-    	// if(){
+        	filterData["lead_id"] = this.state.lead_id;
+    	}
+    	if(this.state.region_id){
         	
-     //    	filterData[] =;
-    	// }
-    	// if(){
+        	filterData["region_id"] = this.state.region_id;
+    	}
+    	if(this.state.is_magnet){
         	
-     //    	filterData[] =;
-    	// }
-    	// if(){
+        	filterData["is_magnet"] = this.state.is_magnet;
+    	}
+    	if(this.state.is_presale){
         	
-     //    	filterData[] =;
-    	// }
-    	// if(){
+        	filterData["is_presale"] = this.state.is_presale;
+    	}
+    	if(this.state.client_number){
         	
-     //    	filterData[] =;
-    	// }
-    	// if(){
+        	filterData["client_number"] = this.state.client_number;
+    	}
+    	if(this.state.commingDate_from && this.state.commingDate_to){
         	
-     //    	filterData[] =;
-    	// }
-    	// if(){
+        	filterData["coming_date"] ={"to":this.state.commingDate_to,"from":this.state.commingDate_from};
+    	}
+    	if(this.state.magnet_lead_rm.length > 0){
         	
-     //    	filterData[] =;
-    	// }
-    	// if(){
+        	filterData["magent_rm_ids"] = this.state.magnet_lead_rm;
+    	}
+    	if(this.state.pre_sale_rm.length > 0){
         	
-     //    	filterData[] =;
-    	// }
+        	filterData["presale_rm_ids"] = this.state.pre_sale_rm;
+    	}
 
+    	if(this.state.hpOpDate_from && this.state.hpOpDate_to){
+        	
+        	filterData["hpop_date"] ={"to":this.state.hpOpDate_to,"from":this.state.hpOpDate_from};
+    	}
 
+    	if(this.state.visitDate_from && this.state.visitDate_to){
+        	
+        	filterData["revisit_date"] ={"to":this.state.visitDate_to,"from":this.state.visitDate_from};
+    	}
 
-    	// else if(){
-     //    filterData = {"bed_config" :this.state.bhk,"price":[{"from":this.state.from,"to":this.state.to}]};
-    		
-    	// }
+    	if(this.state.lastUpdateDate_from && this.state.lastUpdateDate_to){
+        	
+        	filterData["updated_at"] ={"to":this.state.lastUpdateDate_to,"from":this.state.lastUpdateDate_from};
+    	}
+    	
+
+    	
     	// this.setState({activeClear : false});
-    	// this.props.changeFilter();
+    	this.props.changeFilter();
         console.log("=== state of the filter ====",filterData);
-        // this.props.filterData(filterData);  
+        this.props.filterData(filterData);  
 
     }
 
@@ -273,21 +284,21 @@ class Filter extends Component {
             lead_id : '',
             source : '',
             region : '',
-            mobile_num : '',
+            client_number : '',
             client_id : '',
             magnet_lead_rm : '',
             pre_sale_rm : '',
             visit_status : '',
             hpOpStaus : '',
-            magnet_lead : '',
-            presale_lead : '',
+            is_magnet : '',
+            is_presale : '',
             client_type : ''
   		})
   	}
 
 	render(){
 
-		const {option,client_type,userName,source,status,isLoading,region_id,region,assignedDate_from,assignedDate_to,commingDate_from,commingDate_to,closedDate_from,closedDate_to,visitDate_from,visitDate_to,hpOpDate_from,hpOpDate_to,followDate_from,followDate_to,lastUpdateDate_from,lastUpdateDate_to,city,closeReason,visit_status,hpOpStaus,magnet_lead,presale_lead} = this.state;
+		const {option,client_type,userName,source,status,isLoading,region_id,region,assignedDate_from,assignedDate_to,commingDate_from,commingDate_to,closedDate_from,closedDate_to,visitDate_from,visitDate_to,hpOpDate_from,hpOpDate_to,followDate_from,followDate_to,lastUpdateDate_from,lastUpdateDate_to,city,closeReason,visit_status,hpOpStaus,is_magnet,is_presale} = this.state;
 		console.log("cityXXXXXXXXXXXX",this.state)
 		// console.log("closeReasonXXXXXXXXXXXX",closeReason)
 
@@ -361,10 +372,10 @@ class Filter extends Component {
 							</div>
 						</div>
 						<div className="row filterRow">
-							<div className="col-lg-6 col-sm-6 col-6">
+							<div className="col-lg-6 col-sm-6 col-6 mb-3">
 								<Autocomplete
 								  multiple	
-							      id="staus-demo"
+							      id="source-demo"
 							      getOptionSelected={(source, value) => source.source === value.source}
 							      getOptionLabel={source => source.source}
 							      options={source}
@@ -406,7 +417,7 @@ class Filter extends Component {
 							      )}
 							    />
 							</div>
-							<div className="col-lg-6 col-sm-6 col-6">
+							<div className="col-lg-6 col-sm-6 col-6 mb-3">
 								<FormControl>
 								    <InputLabel id="demo-controlled-open-select-label">City</InputLabel>
 							        <Select
@@ -461,9 +472,9 @@ class Filter extends Component {
 								<div className="form-group">
 									<TextField
 							          required
-							          value={this.state.mobile_num}
-							          id="mobile_num"
-							          name="mobile_num"
+							          value={this.state.client_number}
+							          id="client_number"
+							          name="client_number"
 							          onChange={this.handleChange}
 							          label="Mobile Number"
 							          defaultValue=""
@@ -588,10 +599,10 @@ class Filter extends Component {
 							</div>
 						</div>
 						<div className="row filterRow">
-							<div className="col-lg-6 col-sm-6 col-6">
+							<div className="col-lg-6 col-sm-6 col-6 mb-3">
 								<Autocomplete
 								  multiple	
-							      id="asynchronous-demo"
+							      id="magnetRmName"
 							      getOptionSelected={(userName, value) => userName.name === value.name}
 							      getOptionLabel={userName => userName.name}
 							      options={userName}
@@ -633,7 +644,7 @@ class Filter extends Component {
 							      )}
 							    />
 							</div>
-							<div className="col-sm-6 col-6">	
+							<div className="col-sm-6 col-6 mb-3">	
 								<Autocomplete
 								  multiple	
 							      id="asynchronous-demo"
@@ -685,11 +696,11 @@ class Filter extends Component {
 								    <InputLabel id="demo-controlled-open-select-label">Magnet Lead</InputLabel>
 							        <Select
 							          labelId="demo-controlled-open-select-label"
-							          value={magnet_lead}
+							          value={is_magnet}
 							          onChange={this.handleChange}
 							          inputProps={{
-							            name: 'magnet_lead',
-							            id: 'magnet_lead_status',
+							            name: 'is_magnet',
+							            id: 'is_magnet_status',
 							          }}
 							        >
 							          <MenuItem value="">
@@ -705,11 +716,11 @@ class Filter extends Component {
 								    <InputLabel id="demo-controlled-open-select-label">PreSale Lead</InputLabel>
 							        <Select
 							          labelId="demo-controlled-open-select-label"
-							          value={presale_lead}
+							          value={is_presale}
 							          onChange={this.handleChange}
 							          inputProps={{
-							            name: 'presale_lead',
-							            id: 'presale_lead_status',
+							            name: 'is_presale',
+							            id: 'is_presale_status',
 							          }}
 							        >
 							          <MenuItem value="">

@@ -88,12 +88,12 @@ class SpeedDialProject extends React.Component {
                 tooltipTitle="Add Project"
                 onClick={this.handleModal}
               />
-              <SpeedDialAction
+              {/*<SpeedDialAction
                 key="Edit"
                 icon=<EditIcon />
                 tooltipTitle="Update Project"
                 onClick={this.updateHandleModal}
-              />
+              />*/}
           </SpeedDial>
 
         </div>

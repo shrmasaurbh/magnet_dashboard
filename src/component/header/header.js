@@ -77,9 +77,9 @@ class Header extends Component {
                         <li className="nav-item d-none d-sm-inline-block">
                             <a href="index3.html" className="nav-link">Home</a>
                         </li>
-                        <li className="nav-item d-none d-sm-inline-block">
+                        {/*<li className="nav-item d-none d-sm-inline-block">
                             <a href="#" className="nav-link">Contact</a>
-                        </li>
+                        </li>*/}
                     </ul>
                     <form className="form-inline ml-3">
                         <div className="input-group input-group-sm">
@@ -98,7 +98,7 @@ class Header extends Component {
                                 <FontAwesomeIcon icon={faComments} className="nav-icon" />
                                 <span className="badge badge-danger navbar-badge">3</span>
                             </span>
-                            <div className={"dropdown-menu dropdown-menu-lg dropdown-menu-right" + " "+ (this.state.visibility ? 'show' : 'hide')}>
+                            <div className={"dropdown-menu dropdown-menu-lg dropdown-menu-right messageHeader" + " "+ (this.state.visibility ? 'show' : 'hide')}>
                                 <a className="dropdown-item">
                                     <div className="media">
                                         <img src={chets} alt="User Avatar" className="img-size-50 mr-3 img-circle" />
@@ -184,9 +184,9 @@ class Header extends Component {
                         <li className="nav-item d-none d-sm-inline-block">
                             <a href="index3.html" className="nav-link">Home</a>
                         </li>
-                        <li className="nav-item d-none d-sm-inline-block">
+                        {/*<li className="nav-item d-none d-sm-inline-block">
                             <a href="#" className="nav-link">Contact</a>
-                        </li>
+                        </li>*/}
                         <li className="nav-item mobile" onClick ={this.props.mobileBarClick}>
                             <span className="nav-link" data-widget="pushmenu">
                                <FontAwesomeIcon icon={faBars} className="nav-icon" />

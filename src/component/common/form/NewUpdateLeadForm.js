@@ -26,6 +26,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import {getUpdateLeadData} from "../../../dataParser/getListData";
+
 
 const validateName = RegExp(/^[a-zA-Z ]+$/);
 const validateNumber = RegExp(/^(\d{6}|\d{7})$/);
@@ -36,17 +38,19 @@ class newUpdateLeadForm extends Component {
     	super(props);
 		this.state = {
 			project_addedby: '',
-			visit_status : '',
+			lead_status_id : '',
+			leadId : '',
+			lead_sattus : '',
 			ethinicity : '',
-			marital_status : '',
-			flat_type : '',
-			flat_number : '',
-			wing_number : '',
+			is_married : '',
+			flattype : '',
+			flatno : '',
+			building_number : '',
 			booking_amonut : '',
 			special_discount : '',
 			carpet_area : '',
             sweetShow:false,
-            assignedDate_from :null,
+            sitevisit_date :null,
 			followup_date : null,
 			closed_lead_time_date : null,
             type : "success",
@@ -68,58 +72,74 @@ class newUpdateLeadForm extends Component {
 	        var addedBy = '';
 	        this.setState({project_addedby : addedBy})
 	    }
+
+	    console.log("NEw Form=======_------------>", this.props.leadStatus);
+	    console.log("NEw Form=======_------------>", this.props.leadID);
+	    let leadStatus = this.props.leadStatus;
+	    let leadId = this.props.leadID;
+	    this.setState({
+	    	lead_status_id : leadStatus,
+	    	leadId : leadId 
+	    })
+
 	}
 
 	updateLeadFrom = async (e) =>{
 
  		e.preventDefault();
+ 		let upadateLeadReq = {};
+		let leadId = this.state.leadId
 
-		const addLeadRequest = (({visit_status,marital_status,carpet_area,special_discount,booking_amonut,flat_type,wing_number,flat_number,ethinicity,assignedDate_from,followup_date,closed_lead_time_date}) => ({
-			visit_status,
-			marital_status,
+		const addLeadRequest = (({lead_status_id,lead_sattus,is_married,carpet_area,special_discount,booking_amonut,flattype,building_number,flatno,ethinicity,sitevisit_date,followup_date,closed_lead_time_date}) => ({
+			lead_sattus,
+			lead_status_id,
+			is_married,
 			ethinicity,
-			assignedDate_from,
+			sitevisit_date,
 			followup_date,
 			closed_lead_time_date,
-			flat_type,
-			flat_number,
-			wing_number,
+			flattype,
+			flatno,
+			building_number,
 			booking_amonut,
 			carpet_area,
 			special_discount
 	    }))(this.state);
 
-	    console.log("addLeadRequest XXXXXXXXXXXX",addLeadRequest)
+	    console.log("addLeadRequest XXXXXXXXXXXX",addLeadRequest);
 
-	    if(addLeadRequest.visit_status != "" &&  addLeadRequest.followup_date != null){
+	    upadateLeadReq.id = leadId;
+	    upadateLeadReq.data = addLeadRequest;
 
-	    	// var addLeadRes = await getAddLeadData(addLeadRequest);
-		    // console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
+	    if(addLeadRequest.lead_sattus != "" &&  addLeadRequest.followup_date != null){
 
-		    // if(addLeadRes.meta.status === 201){
+	    	var addLeadRes = await getUpdateLeadData(upadateLeadReq);
+		    console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
+
+		    if(addLeadRes.meta.status === 200){
 		    	
-		    // 	console.log("Lead insert successfully !!!");
+		    	console.log("Lead insert successfully !!!");
 
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "success",	
-	     //            title : "Lead Added Successfully!!!"
+		    	this.setState({
+	                sweetShow:true,
+	                type : "success",	
+	                title : "Lead Updated Successfully!!!"
 
-	     //        });
+	            });
 
-		    // }else if(addLeadRes.meta.status === 401){
+		    }else if(addLeadRes.meta.status === 401){
         		
-      //   		localStorage.clear();
-      //   		this.props.history.push("/login");
+        		localStorage.clear();
+        		this.props.history.push("/login");
         		
-      //   	}else{
+        	}else{
 		    	
-		    // 	this.setState({
-	     //            sweetShow:true,
-	     //            type : "error",
-	     //            title : addLeadRes.meta.message
-	     //        });
-		    // }
+		    	this.setState({
+	                sweetShow:true,
+	                type : "error",
+	                title : addLeadRes.meta.message
+	            });
+		    }
 	    }else{
 
 	    }
@@ -143,9 +163,8 @@ class newUpdateLeadForm extends Component {
 
     render() {
 
-	    const {sweetShow, type, title,assignedDate_from,visit_status,ethinicity,marital_status,followup_date,closed_lead_time_date} = this.state;
+	    const {sweetShow, type, title,sitevisit_date,lead_sattus,ethinicity,is_married,followup_date,closed_lead_time_date} = this.state;
 	    console.log("in the render", this.state);
-	    console.log("NEw Form=======_------------>", this.props.leadStatus);
 
         return (
             <Aux>
@@ -194,8 +213,8 @@ class newUpdateLeadForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="flat_type"
-								          name="flat_type"
+								          id="flattype"
+								          name="flattype"
 								          onChange={this.onChange}
 								          label="Flat type"
 								          defaultValue=""
@@ -216,8 +235,8 @@ class newUpdateLeadForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="flat_number"
-								          name="flat_number"
+								          id="flatno"
+								          name="flatno"
 								          onChange={this.onChange}
 								          label="Flat Number"
 								          defaultValue=""
@@ -236,10 +255,10 @@ class newUpdateLeadForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="wing_number"
-								          name="wing_number"
+								          id="building_number"
+								          name="building_number"
 								          onChange={this.onChange}
-								          label="Wing Number"
+								          label="Building Number"
 								          defaultValue=""
 								          helperText=""
 								          InputProps={{
@@ -301,11 +320,11 @@ class newUpdateLeadForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Marital Status</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={marital_status}
+								          value={is_married}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'marital_status',
-								            id: 'marital_status',
+								            name: 'is_married',
+								            id: 'is_married',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -347,9 +366,9 @@ class newUpdateLeadForm extends Component {
 									          label="Site Visit Date"
 									          format="MM/dd/yyyy"
 									          maxDate={new Date()}
-									          name="assignedDate_from"
-									          value={assignedDate_from}
-									          onChange={(key,date)=>this.handleDateChange('assignedDate_from',date)}
+									          name="sitevisit_date"
+									          value={sitevisit_date}
+									          onChange={(key,date)=>this.handleDateChange('sitevisit_date',date)}
 									          KeyboardButtonProps={{
 									            'aria-label': 'change date',
 									          }}
@@ -383,11 +402,11 @@ class newUpdateLeadForm extends Component {
 									    <InputLabel id="demo-controlled-open-select-label">Site Visit status</InputLabel>
 								        <Select
 								          labelId="demo-controlled-open-select-label"
-								          value={visit_status}
+								          value={lead_sattus}
 								          onChange={this.onChange}
 								          inputProps={{
-								            name: 'visit_status',
-								            id: 'visit_status',
+								            name: 'lead_sattus',
+								            id: 'lead_sattus',
 								          }}
 								        >
 								          <MenuItem value="">
@@ -427,7 +446,7 @@ class newUpdateLeadForm extends Component {
 							<div className="row">
 								<div className="col-md-12 col-sm-12 text-center col-12">
 									<div className="form-group">
-										<button type="submit" className="btn btn-success" onClick={this.updateProjectForm}>Submit</button>
+										<button type="submit" className="btn btn-success" onClick={this.updateLeadFrom}>Submit</button>
 									</div>
 								</div>
 							</div>	

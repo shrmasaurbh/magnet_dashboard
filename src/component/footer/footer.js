@@ -36,18 +36,7 @@ class Footer extends Component {
                 <div className="float-right d-none d-sm-inline-block">
                     <b>Version</b> 1.0.0
                 </div>
-                <div>
-                    <button className="btn btn-info" onClick={this.handleSweet}>Sweet success</button>
-                    <SweetAlert show={this.state.sweetShow} changeSweet={this.handleSweet.bind(this)} type="success"/>
-                </div>
-                <div className="pt-2">
-                    <button className="btn btn-info" onClick={this.handleSweetCancel}>Sweet cancel</button>
-                    <SweetCancel show={this.state.sweetShowCancel} changeSweet={this.handleSweetCancel.bind(this)} type="error"/>
-                </div>
-                <div className="pt-2">
-                    <button className="btn btn-info" onClick={this.handleModal}>Modal</button>
-                    <BootModal show={this.state.modalShow} changeModal={this.handleModal.bind(this)}/>
-                </div>
+                
             </footer>
 		);
 	};
