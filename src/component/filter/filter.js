@@ -392,7 +392,7 @@ class Filter extends Component {
 							        	source_ids : projectId,
 							        })
 
-							        if (status === null) {
+							        if (source === null) {
 							        	this.setState({source: []})
 							        }
 							      }}

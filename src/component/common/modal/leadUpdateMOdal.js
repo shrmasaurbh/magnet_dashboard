@@ -89,10 +89,9 @@ class LeadModal extends Component {
 			        </Modal.Title>
 			      </Modal.Header>
 			      <Modal.Body>
-			      	{status_id === '' ? 
-				        <div className="col-lg-6 col-sm-6 col-6">
+				        <div className="col-lg-6 col-sm-6 col-6 mb-3">
 							<FormControl>
-								    <InputLabel id="demo-controlled-open-select-label">Status</InputLabel>
+								    <InputLabel id="demo-controlled-open-select-label">Select Lead Status</InputLabel>
 							        <Select
 							          	labelId="demo-controlled-open-select-label"
 							          	value={status_id}
@@ -115,9 +114,9 @@ class LeadModal extends Component {
 							        </Select>
 								</FormControl>
 						</div>
-				        :
-				        <Form_name changeModal={(value)=>this.props.changeModal(this.props.fromType)} leadStatus={this.state.status_id} leadID={this.props.fromType}/>
-				    }
+				        {status_id !== '' &&
+					        <Form_name changeModal={(value)=>this.props.changeModal(this.props.fromType)} leadStatus={this.state.status_id} leadID={this.props.fromType}/>
+					    }
 			      </Modal.Body>
 			    </Modal>
             </Aux>

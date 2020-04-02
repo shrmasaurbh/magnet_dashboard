@@ -474,7 +474,7 @@ class cancelUpdateForm extends Component {
 							<div className="row">
 								<div className="col-md-12 col-sm-12 text-center col-12">
 									<div className="form-group">
-										<button type="submit" className="btn btn-success" onClick={this.updateProjectForm}>Submit</button>
+										<button type="submit" className="btn btn-success" onClick={this.updateLeadFrom}>Submit</button>
 									</div>
 								</div>
 							</div>	

@@ -204,7 +204,7 @@ class magnetList extends Component {
 				{status === 200 ?
 					<div className="listContainer">
 						<SpeedDialLead />
-						<div className="p-2 pt-3 pb-3 leadMainHeader">
+						<div className="p-3 leadMainHeader">
 							<span className="totalCount">Total Leads : </span>
 							<span>{count}</span>
 							<div className="d-inline ml-3 filterHeader">
@@ -266,7 +266,7 @@ class magnetList extends Component {
 							                            <div className="col-md-2 col-sm-12 col-12 mb-2">
 							                                <h3 className="text-capitalize">
 							                                	<FontAwesomeIcon icon={faBuilding} className="text-info mr-2"/>
-							                                	{listVal.lead_id  ? 
+							                                	{listVal.lead_status  ? 
 								                                	<b>{listVal.lead_status.status}</b>
 								                                	:
 								                                	<b>-</b>

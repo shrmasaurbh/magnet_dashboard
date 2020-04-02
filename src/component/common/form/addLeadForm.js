@@ -7,6 +7,7 @@ import "./form.css";
 import {Form} from 'react-bootstrap';
 import SweetAlert from "../../../component/common/sweetAlert/sweetAlertSuccess";
 import {getRegion, getAutoCompleteProject} from "../../../dataParser/getProjectData";
+import {getLeadStatusData,getLeadSourceData} from "../../../dataParser/commomDataApi";
 import {getAddLeadData} from "../../../dataParser/getListData";
 import {getUserListData} from "../../../dataParser/getListUserData";
 import TextField from '@material-ui/core/TextField';
@@ -41,34 +42,33 @@ class addLeadForm extends Component {
 	constructor(props) {
     	super(props);
 		this.state = {
-			p_lead_added_by : '',
+			p_lead_added_by : 0,
 			p_leadtype : '',
-			p_projectid : '',
+			project_id : '',
             sweetShow:false,
             type : "",
             title : "",
-            p_city : '',
             p_assignby : '',
-            p_assignstatus : false,
-            p_nationality : 'indian',
+            p_assignstatus : 0,
+            p_nationality : 1,
             p_magnetlead : 0,
             p_message : '',
             project : [],
             isLoading : false,
             userName : [],
-            p_teamid : '',
+            p_teamid : 0,
             p_username: "",
 			p_mobilenumber: "",
-			p_source: "",
+			source_id: "",
+			source: [],
 			p_campaigntype: "",
 			showHideFileds : false,
 			errors:{
                	p_leadtype : '',
 				p_username : '',
-				p_projectid : '',
+				project_id : '',
 				p_mobilenumber : '',
-				p_source : '',
-				p_city : '',
+				source_id : '',
 				p_message : '',
            	}, 
 		};
@@ -85,6 +85,23 @@ class addLeadForm extends Component {
 	    }else{
 	        var addedBy = '';
 	        this.setState({p_lead_added_by : addedBy})
+	    }
+
+	    var getSourceData = await getLeadSourceData();
+	    console.log("getSourceData=+++++++++++++>",getSourceData)
+
+	    if(getSourceData.meta.status === 200){
+
+	    	this.setState({source : getSourceData.data})
+
+	    }else if(getSourceData.meta.status === 401){
+    		
+    		localStorage.clear();
+    		this.props.history.push("/login");
+    		
+    	}else{
+
+	        this.setState({source : getSourceData})
 	    }
 
 	    // var regionData = await getRegion();
@@ -109,14 +126,12 @@ class addLeadForm extends Component {
 
  		e.preventDefault();
 
-		const addLeadRequest = (({p_leadtype,p_lead_added_by,p_assignby,p_username,p_projectid,p_mobilenumber,p_source,p_city,p_message,p_nationality,p_assignstatus,p_teamid,p_campaigntype}) => ({
+		const addLeadRequest = (({p_lead_added_by,p_assignby,p_username,project_id,p_mobilenumber,source_id,p_message,p_nationality,p_assignstatus,p_teamid,p_campaigntype}) => ({
 			p_username,
 			p_mobilenumber,
-			p_leadtype,
 			p_lead_added_by,
-			p_source,
-			p_city,
-			p_projectid,
+			source_id,
+			project_id,
 			p_message,
 			p_nationality,
 			p_assignstatus,
@@ -127,7 +142,7 @@ class addLeadForm extends Component {
 
 	    console.log("addLeadRequest XXXXXXXXXXXX",addLeadRequest)
 
-	    if(addLeadRequest.p_leadtype != "" && validateName.test(addLeadRequest.p_leadtype) &&  addLeadRequest.p_username != "" &&  addLeadRequest.p_projectid != "" &&  addLeadRequest.p_mobilenumber != "" && validateNumber.test(addLeadRequest.p_mobilenumber) &&  addLeadRequest.p_source != ""){
+	    if(addLeadRequest.p_leadtype != "" && validateName.test(addLeadRequest.p_leadtype) &&  addLeadRequest.p_username != "" &&  addLeadRequest.project_id != "" &&  addLeadRequest.p_mobilenumber != "" && validateNumber.test(addLeadRequest.p_mobilenumber) &&  addLeadRequest.source_id != ""){
 
 	    	var addLeadRes = await getAddLeadData(addLeadRequest);
 		    console.log("addLeadRes XXXXXXXXXXXX",addLeadRes);
@@ -207,12 +222,12 @@ class addLeadForm extends Component {
 				}))
 	    	}
 
-	    	if(this.state.p_source == ""){
+	    	if(this.state.source_id == ""){
 	    		
 	            this.setState(prevState => ({
 				    errors: {                
 				        ...prevState.errors,    
-				        p_source:"*please enter valid source"
+				        source_id:"*please enter valid source"
 				    }
 				}))
 	    	}else{
@@ -220,7 +235,7 @@ class addLeadForm extends Component {
 	    		this.setState(prevState => ({
 				    errors: {                
 				        ...prevState.errors,    
-				        p_source:""
+				        source_id:""
 				    }
 				}))
 	    	}
@@ -293,7 +308,7 @@ class addLeadForm extends Component {
 
     render() {
 	 	
-	    const {region,sweetShow,type,title,p_city,p_assignstatus,p_nationality,p_magnetlead,project,isLoading,userName,p_lead_added_by} = this.state;
+	    const {region,sweetShow,source,type,title,p_assignstatus,p_nationality,p_magnetlead,project,isLoading,userName,p_lead_added_by} = this.state;
 	    console.log("this.state leadAddFormXXXXXXXXXXXXXXXX",this.state);
 
         return (
@@ -357,7 +372,7 @@ class addLeadForm extends Component {
 								        }else{
 								        	this.setState({
 									        	p_leadtype : project.project_name,
-									        	p_projectid : project.project_id,
+									        	project_id : project.project_id,
 									        })
 								        }
 								      }}
@@ -390,24 +405,42 @@ class addLeadForm extends Component {
 								    />
 								</div>
 								<div className="col-sm-6">
-									<div className="form-group">
-										<TextField
-										error = {this.state.errors.p_source !== '' ? 'error' : ''}
-										required
-								        id="p_source"
-								        name="p_source"
-								        helperText={this.state.errors.p_source !== '' ? this.state.errors.p_source : ''} 
-								        onChange={this.onChange}
-								        label="Project Source"
-								        InputProps={{
-								          startAdornment: (
-								            <InputAdornment position="start">
-								              <ApartmentRoundedIcon />
-								            </InputAdornment>
-								          ),
-								        }}
-							      	/>
-									</div>
+									<Autocomplete
+								      id="source-demo"
+								      getOptionSelected={(source, value) => source.source === value.source}
+								      getOptionLabel={source => source.source}
+								      options={source}
+								      loading={isLoading}
+								      onChange={(_event, source) => {
+								        console.log(source);
+								        this.setState({
+								        	source_id : source.source_id,
+								        })
+
+								        if (source === null) {
+								        	this.setState({source: []})
+								        }
+								      }}
+								      renderInput={params => (
+								        <TextField
+								          {...params}
+								          label="Source"
+								          fullWidth
+								          onChange={this.handleAutoUserChange}
+								          InputProps={{
+								            ...params.InputProps,
+								            endAdornment: (
+								              <React.Fragment>
+								                {isLoading ? (
+								                  <CircularProgress color="inherit" size={20} />
+								                ) : null}
+								                {params.InputProps.endAdornment}
+								              </React.Fragment>
+								            )
+								          }}
+								        />
+								      )}
+								    />
 								</div>
 							</div>
 							{this.state.showHideFileds === false ? 
@@ -425,32 +458,6 @@ class addLeadForm extends Component {
 							{this.state.showHideFileds === true ?
 							<Aux>	 
 								<div className="row">
-									<div className="col-sm-6 mb-3">
-										<FormControl>
-										    <InputLabel id="demo-controlled-open-select-label">Project City</InputLabel>
-									        <Select
-											  error = {this.state.errors.p_city !== '' ? 'error' : ''}
-									          labelId="demo-controlled-open-select-label"
-									          value={p_city}
-									          onChange={this.onChange}
-									          inputProps={{
-									            name: 'p_city',
-									            id: 'project_city',
-									          }}
-									          helpertext={this.state.errors.p_city!== '' ? this.state.errors.p_city: ''} 
-									        >
-									          <MenuItem value="">
-									            <em>None</em>
-									          </MenuItem>
-									          <MenuItem value="mumbai">Mumbai</MenuItem>
-									          <MenuItem value="pune">Pune</MenuItem>
-									          <MenuItem value="bangalore">Bangalore</MenuItem>
-									          <MenuItem value="delhi">Delhi</MenuItem>
-									          <MenuItem value="kolkata">Kolkata</MenuItem>
-									          <MenuItem value="goa">Goa</MenuItem>
-									        </Select>
-										</FormControl>
-									</div>
 									<div className="col-sm-6">
 										<div className="form-group">
 											<TextField
@@ -469,42 +476,8 @@ class addLeadForm extends Component {
 								      	/>
 										</div>
 									</div>
-								</div>
-								<div className="row mb-3">
-									<div className="col-sm-4">
-										<div className="form-group">
-											<FormLabel component="legend">Nationality</FormLabel>
-										      <RadioGroup row aria-label="p_nationality" name="p_nationality" value={p_nationality} onChange={this.onChange}>
-										        <FormControlLabel value="indian" control={<Radio color="primary"/>} label="Indian" />
-										        <FormControlLabel value="nri" control={<Radio color="primary" />} label="NRI" />
-										      </RadioGroup> 
-										</div>
-									</div>
-									<div className="col-sm-4">
-										<div className="form-group">
-											<FormLabel component="legend">Magnet Lead</FormLabel>
-										      <RadioGroup row aria-label="p_magnetlead" name="p_magnetlead" value={p_magnetlead} onChange={this.onChange}>
-										        <FormControlLabel value="1" control={<Radio color="primary" />} label="Yes" />
-										        <FormControlLabel value="0" control={<Radio color="primary" />} label="No" />
-										      </RadioGroup> 
-										</div>
-									</div>
-									<div className="col-sm-4">
-										<div className="form-group">
-											<FormControlLabel
-									          value={p_assignstatus}
-									          name="p_assignstatus"
-									          control={<Switch color="primary" />}
-									          label="Assign to RM"
-									          labelPlacement="top"
-									          onChange={this.handleChange}
-									        />
-										</div>
-									</div>
-								</div>
-								<div className="row mb-3">
 									{p_assignstatus === true ? 
-										<div className="col-sm-6">
+										<div className="col-sm-6 mt-1">
 											<Autocomplete
 									      id="asynchronous-demo"
 									      getOptionSelected={(userName, value) => userName.name === value.name}
@@ -554,6 +527,40 @@ class addLeadForm extends Component {
 										: 
 										''
 									}
+								</div>
+								<div className="row mb-3">
+									<div className="col-sm-4">
+										<div className="form-group">
+											<FormLabel component="legend">Nationality</FormLabel>
+										      <RadioGroup row aria-label="p_nationality" name="p_nationality" value={p_nationality} onChange={this.onChange}>
+										        <FormControlLabel value="1" control={<Radio color="primary"/>} label="Indian" />
+										        <FormControlLabel value="2" control={<Radio color="primary" />} label="NRI" />
+										      </RadioGroup> 
+										</div>
+									</div>
+									<div className="col-sm-4">
+										<div className="form-group">
+											<FormLabel component="legend">Magnet Lead</FormLabel>
+										      <RadioGroup row aria-label="p_magnetlead" name="p_magnetlead" value={p_magnetlead} onChange={this.onChange}>
+										        <FormControlLabel value="1" control={<Radio color="primary" />} label="Yes" />
+										        <FormControlLabel value="0" control={<Radio color="primary" />} label="No" />
+										      </RadioGroup> 
+										</div>
+									</div>
+									<div className="col-sm-4">
+										<div className="form-group">
+											<FormControlLabel
+									          value={p_assignstatus}
+									          name="p_assignstatus"
+									          control={<Switch color="primary" />}
+									          label="Assign to RM"
+									          labelPlacement="top"
+									          onChange={this.handleChange}
+									        />
+										</div>
+									</div>
+								</div>
+								<div className="row mb-3">
 									<div className="col-sm-6 col-12">
 										<div className="form-group">
 											<TextField

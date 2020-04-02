@@ -164,28 +164,6 @@ class pipelineUpdateForm extends Component {
 									<div className="form-group">
 										<TextField
 								          required
-								          id="interested_area"
-								          name="interested_area"
-								          onChange={this.onChange}
-								          label="Area Interested"
-								          defaultValue=""
-								          helperText=""
-								          InputProps={{
-									          startAdornment: (
-									            <InputAdornment position="start">
-									              <GpsFixedRoundedIcon />
-									            </InputAdornment>
-									          ),
-									      }}
-								        />
-									</div>
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-sm-6">
-									<div className="form-group">
-										<TextField
-								          required
 								          id="current_locality"
 								          name="current_locality"
 								          onChange={this.onChange}
@@ -203,26 +181,24 @@ class pipelineUpdateForm extends Component {
 									</div>
 								</div>
 								<div className="col-sm-6">
-									<FormControl>
-									    <InputLabel id="demo-controlled-open-select-label">Property Type</InputLabel>
-								        <Select
-								          labelId="demo-controlled-open-select-label"
-								          value={property_type}
+									<div className="form-group">
+										<TextField
+								          required
+								          id="interested_area"
+								          name="interested_area"
 								          onChange={this.onChange}
-								          inputProps={{
-								            name: 'property_type',
-								            id: 'property_type',
-								          }}
-								        >
-								          <MenuItem value="">
-								            <em>None</em>
-								          </MenuItem>
-								          	<MenuItem value="New Development-Ready to move">New Development-Ready to move</MenuItem>
-											<MenuItem value="New Development-Under Constrution">New Development-Under Constrution</MenuItem>
-											<MenuItem value="Resale">Resale</MenuItem>
-											<MenuItem value="Rental">Rental</MenuItem> 
-								        </Select>
-									</FormControl>
+								          label="Area Interested"
+								          defaultValue=""
+								          helperText=""
+								          InputProps={{
+									          startAdornment: (
+									            <InputAdornment position="start">
+									              <GpsFixedRoundedIcon />
+									            </InputAdornment>
+									          ),
+									      }}
+								        />
+									</div>
 								</div>
 							</div>
 							<div className="row">
@@ -254,21 +230,24 @@ class pipelineUpdateForm extends Component {
 								</div>
 								<div className="col-sm-6">
 									<FormControl>
-										<MuiPickersUtilsProvider utils={DateFnsUtils}>
-											<KeyboardDatePicker
-									          margin="normal"
-									          id="assigned_date_form"
-									          label="Site Visit Date"
-									          format="MM/dd/yyyy"
-									          maxDate={new Date()}
-									          name="sitevisit_date"
-									          value={sitevisit_date}
-									          onChange={(key,date)=>this.handleDateChange('sitevisit_date',date)}
-									          KeyboardButtonProps={{
-									            'aria-label': 'change date',
-									          }}
-									        />
-								    	</MuiPickersUtilsProvider> 
+									    <InputLabel id="demo-controlled-open-select-label">Property Type</InputLabel>
+								        <Select
+								          labelId="demo-controlled-open-select-label"
+								          value={property_type}
+								          onChange={this.onChange}
+								          inputProps={{
+								            name: 'property_type',
+								            id: 'property_type',
+								          }}
+								        >
+								          <MenuItem value="">
+								            <em>None</em>
+								          </MenuItem>
+								          	<MenuItem value="New Development-Ready to move">New Development-Ready to move</MenuItem>
+											<MenuItem value="New Development-Under Constrution">New Development-Under Constrution</MenuItem>
+											<MenuItem value="Resale">Resale</MenuItem>
+											<MenuItem value="Rental">Rental</MenuItem> 
+								        </Select>
 									</FormControl>
 								</div>
 							</div>
@@ -293,12 +272,29 @@ class pipelineUpdateForm extends Component {
 									</FormControl>
 								</div>
 								<div className="col-sm-6">
+									<FormControl>
+										<MuiPickersUtilsProvider utils={DateFnsUtils}>
+											<KeyboardDatePicker
+									          margin="normal"
+									          id="assigned_date_form"
+									          label="Site Visit Date"
+									          format="MM/dd/yyyy"
+									          maxDate={new Date()}
+									          name="sitevisit_date"
+									          value={sitevisit_date}
+									          onChange={(key,date)=>this.handleDateChange('sitevisit_date',date)}
+									          KeyboardButtonProps={{
+									            'aria-label': 'change date',
+									          }}
+									        />
+								    	</MuiPickersUtilsProvider> 
+									</FormControl>
 								</div>
 							</div>
 							<div className="row">
 								<div className="col-md-12 col-sm-12 text-center col-12">
 									<div className="form-group">
-										<button type="submit" className="btn btn-success" onClick={this.updateProjectForm}>Submit</button>
+										<button type="submit" className="btn btn-success" onClick={this.updateLeadFrom}>Submit</button>
 									</div>
 								</div>
 							</div>	

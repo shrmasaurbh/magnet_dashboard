@@ -64,7 +64,10 @@ export const get = async (url,options) =>{
 
 export const post = async (url, options) => {
 
+      console.log("options=======!!!!!!!!!------>",options)
+      console.log("options=======!!!!!!!!!------>",url)
       if(options == null && options == ''){
+        console.log("options=======!!!!!!!!!------>Errrroroooooooooooo")
 
           let errorRes = "Data field is empty";
           return errorRes
