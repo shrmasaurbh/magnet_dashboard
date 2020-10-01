@@ -25,7 +25,7 @@ export const Routes = () => {
 			<Route exact path="/forget_password" component={withRouter(Forget)} />
 			<Route exact path="/reset_password" component={withRouter(ResetPass)} />
 			<Route exact path="/change_password" component={withRouter(ChangePass)} />
-      		<Route component={NotFoundComponent} />
+      			<Route component={NotFoundComponent} />
 		</Switch>
 	);
 
