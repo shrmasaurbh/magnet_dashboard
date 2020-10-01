@@ -1,32 +1,17 @@
 import {get, post, patch} from "../utils/methods.js";
 
-export const getAllProjectData = async (value) => {
-	console.log("valuexxxxxxxxxxxx");
-	console.log(value);
-	
-	let allProjectData = await post('/projects/list',value)
-	console.log('allProjectData ===>', allProjectData);
-	return  allProjectData;
-
+export const getAllProjectData = async (value) => {	
+	return await post('/projects/list',value)
 }
 
 export const addProject = async (value) =>{
-
-	console.log("valuexxxxxxxxxxxx",value);
-
-	let addProjectData = await post('/projects/add',value)
-	console.log('addProjectData ===>', addProjectData);
-	return  addProjectData;
+	return await post('/projects/add',value)
+	
 } 
 
 export const updateProject = async (value) =>{
-
-	console.log("valuexxxxxxxxxxxx",value);
-	console.log("valuexxxxxxxxxxxx",value.id);
-
-	let updateProjectData = await patch('/projects/'+value.id.toString(), value.value)
-	console.log('updateProjectData ===>', updateProjectData);
-	return  updateProjectData;
+	return await patch('/projects/'+value.id.toString(), value.value)
+	
 } 
 
 export const getProjectDetail = async (value) =>{
